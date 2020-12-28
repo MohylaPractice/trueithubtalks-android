@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">TIH Talks</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="name_title">Name</string>
+    <string name="password_title">Password</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign up</string>
+    <string name="new_user_title">New user?</string>
+    <string name="sign_in_to_continue_title">Sign in to continue</string>
+    <string name="welcome_back_title">Welcome back,</string>
 </resources>
