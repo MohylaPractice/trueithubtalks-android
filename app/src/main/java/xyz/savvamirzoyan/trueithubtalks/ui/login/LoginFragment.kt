@@ -1,4 +1,4 @@
-package xyz.savvamirzoyan.trueithubtalks.fragment
+package xyz.savvamirzoyan.trueithubtalks.ui.login
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 android {
@@ -65,9 +67,6 @@ dependencies {
 
     // Jetpack Compose Integration
     implementation "androidx.navigation:navigation-compose:1.0.0-alpha04"
-
-    apply plugin: "androidx.navigation.safeargs.kotlin"
-    apply plugin: 'kotlin-kapt'
 
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
 }

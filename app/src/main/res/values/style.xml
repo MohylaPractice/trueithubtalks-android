@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AccentText">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/orange_500</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TitleText">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="RegularText">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/grey_300</item>
+    </style>
+
+    <style name="SubText">
+        <item name="android:textColor">@color/grey_400</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="AccentButton">
+        <item name="android:backgroundTint">@color/orange_500</item>
+    </style>
+
+    <style name="AccentEditText">
+        <item name="android:editTextColor">@color/grey_300</item>
+        <item name="android:backgroundTint">@color/orange_500</item>
+    </style>
+
+</resources>
