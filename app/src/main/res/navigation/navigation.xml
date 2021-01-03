@@ -9,5 +9,13 @@
         android:id="@+id/loginFragment"
         android:name="xyz.savvamirzoyan.trueithubtalks.ui.login.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="xyz.savvamirzoyan.trueithubtalks.ui.signup.SignUpFragment"
+        android:label="SignUpFragment" />
 </navigation>

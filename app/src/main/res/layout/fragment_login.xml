@@ -64,7 +64,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="@string/login"
-                android:theme="@style/AccentButton"
+                android:theme="@style/AccentButtonEnabled"
                 app:layout_constraintBottom_toTopOf="@+id/textView3"
                 app:layout_constraintEnd_toEndOf="@+id/editTextPassword"
                 app:layout_constraintHorizontal_bias="0.5"

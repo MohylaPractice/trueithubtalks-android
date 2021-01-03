@@ -9,4 +9,5 @@
     <string name="new_user_title">New user?</string>
     <string name="sign_in_to_continue_title">Sign in to continue</string>
     <string name="welcome_back_title">Welcome back,</string>
+    <string name="password_again_title">Password (again)</string>
 </resources>
