@@ -130,6 +130,22 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView6"
                 tools:ignore="Autofill" />
 
+            <TextView
+                android:id="@+id/textViewInvalidCredentials"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/error_invalid_name_or_password"
+                android:textAlignment="center"
+                android:theme="@style/ErrorText"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@+id/textView3"
+                app:layout_constraintEnd_toEndOf="@+id/buttonLogin"
+                app:layout_constraintStart_toStartOf="@+id/buttonLogin"
+                app:layout_constraintTop_toBottomOf="@+id/buttonLogin"
+                app:layout_constraintVertical_bias="0.0" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 </layout>

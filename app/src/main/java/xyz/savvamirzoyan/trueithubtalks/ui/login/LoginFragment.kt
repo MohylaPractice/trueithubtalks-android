@@ -28,12 +28,15 @@ class LoginFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentLoginBinding.inflate(inflater, container, false)
 
+        setLoginClickListener()
         setSignUpClickListener()
         setOnChangedNameListener()
         setOnChangedPasswordListener()
 
         // ViewModel
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
+
+        setTokenObserver()
 
         binding.editTextName.text.insert(0, viewModel.userName.value!!)
         binding.editTextPassword.text.insert(0, viewModel.userPassword.value!!)
@@ -105,7 +108,6 @@ class LoginFragment : Fragment() {
         binding.textViewSignUp.setOnClickListener {
             val action = LoginFragmentDirections.actionLoginFragmentToSignUpFragment()
             NavHostFragment.findNavController(this).navigate(action)
-
         }
     }
 
@@ -139,6 +141,29 @@ class LoginFragment : Fragment() {
 
     private fun setAlphaByBoolean(view: View, value: Boolean) {
         view.alpha = 0.3F + 0.7F * value.toInt()
+    }
+
+    private fun setLoginClickListener() {
+        binding.buttonLogin.setOnClickListener {
+
+            viewModel.sendCredentials(
+                binding.editTextName.text.toString(),
+                binding.editTextPassword.text.toString()
+            )
+        }
+    }
+
+    private fun setTokenObserver() {
+        viewModel.token.observe(viewLifecycleOwner, {
+            // invalid credentials
+            if (it == "") {
+                binding.textViewInvalidCredentials.visibility = View.VISIBLE
+            } else {
+                binding.textViewInvalidCredentials.visibility = View.INVISIBLE
+
+
+            }
+        })
     }
 }
 

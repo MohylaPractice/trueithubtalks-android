@@ -3,16 +3,15 @@ package xyz.savvamirzoyan.trueithubtalks.ui.login
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import timber.log.Timber
+import xyz.savvamirzoyan.trueithubtalks.repository.RepositoryController
 
 class LoginViewModel : ViewModel() {
-
     private var nameFilled = MutableLiveData<Boolean>()
     private var passwordFilled = MutableLiveData<Boolean>()
+    var token = MutableLiveData<String>()
 
     val isLoginButtonEnabled: Boolean
-        get() {
-            return ((nameFilled.value == true) and (passwordFilled.value == true))
-        }
+        get() = (nameFilled.value == true) and (passwordFilled.value == true)
 
     var userName = MutableLiveData("name")
     var userPassword = MutableLiveData("password")
@@ -35,7 +34,6 @@ class LoginViewModel : ViewModel() {
         Timber.i("updateNameFilled() called | name: $name")
         userName.value = name
         nameFilled.value = userName.value!!.isNotBlank() and userName.value!!.isNotEmpty()
-        Timber.i("                          | nameFilled: ${nameFilled.value}")
     }
 
     fun updatePasswordFilled(password: String) {
@@ -43,6 +41,10 @@ class LoginViewModel : ViewModel() {
         userPassword.value = password
         passwordFilled.value =
             userPassword.value!!.isNotBlank() and userPassword.value!!.isNotEmpty()
-        Timber.i("                              | passwordFilled: ${passwordFilled.value}")
+    }
+
+    fun sendCredentials(name: String, password: String) {
+        Timber.i("sendCredentials($name, $password) called")
+        RepositoryController.sendCredentials(name, password, token)
     }
 }

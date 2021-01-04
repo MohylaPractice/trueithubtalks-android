@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="xyz.savvamirzoyan.trueithubtalks">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".TIHTalksApplication"
         android:allowBackup="true"
