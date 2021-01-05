@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.databinding.FragmentLoginBinding
-import xyz.savvamirzoyan.trueithubtalks.interfaces.IBackButtonOnly
+import xyz.savvamirzoyan.trueithubtalks.interfaces.IAuthenticateActivity
 import xyz.savvamirzoyan.trueithubtalks.ui.toInt
 
 
@@ -30,23 +30,25 @@ class LoginFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentLoginBinding.inflate(inflater, container, false)
 
-        setLoginClickListener()
-        setSignUpClickListener()
-        setOnChangedNameListener()
-        setOnChangedPasswordListener()
-
         // ViewModel
-        viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
-
-        setTokenObserver()
-
-        (activity as IBackButtonOnly).showBackButton(false)
+        viewModel = ViewModelProvider(
+            this,
+            LoginViewModelFactory(requireActivity())
+        ).get(LoginViewModel::class.java)
 
         binding.editTextName.text.insert(0, viewModel.userName)
         binding.editTextPassword.text.insert(0, viewModel.userPassword)
 
         binding.buttonLogin.isEnabled = viewModel.isLoginButtonEnabled
         setAlphaByBoolean(binding.buttonLogin, viewModel.isLoginButtonEnabled)
+
+        setLoginClickListener()
+        setSignUpClickListener()
+        setOnChangedNameListener()
+        setOnChangedPasswordListener()
+        setTokenObserver()
+
+        (activity as IAuthenticateActivity).showBackButton(false)
 
         return binding.root
     }
@@ -167,6 +169,8 @@ class LoginFragment : Fragment() {
                 binding.textViewInvalidCredentials.visibility = View.VISIBLE
             } else {
                 binding.textViewInvalidCredentials.visibility = View.INVISIBLE
+                viewModel.saveToken(it)
+                (activity as IAuthenticateActivity).moveToMainActivity()
             }
         })
     }

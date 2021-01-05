@@ -1,13 +1,17 @@
 package xyz.savvamirzoyan.trueithubtalks.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.R
-import xyz.savvamirzoyan.trueithubtalks.interfaces.IBackButtonOnly
+import xyz.savvamirzoyan.trueithubtalks.interfaces.IAuthenticateActivity
 
-class AuthenticateActivity : AppCompatActivity(), IBackButtonOnly {
+class AuthenticateActivity : AppCompatActivity(), IAuthenticateActivity {
+
+    private val activity = this
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authenticate)
@@ -51,6 +55,11 @@ class AuthenticateActivity : AppCompatActivity(), IBackButtonOnly {
         } else {
             super.onBackPressed()
         }
+    }
+
+    override fun moveToMainActivity() {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 }
 

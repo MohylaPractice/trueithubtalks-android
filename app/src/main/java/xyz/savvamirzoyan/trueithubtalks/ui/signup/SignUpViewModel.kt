@@ -52,4 +52,9 @@ class SignUpViewModel : ViewModel() {
         Timber.i("createUser($name, $password) called")
         RepositoryController.createUser(name, password, token)
     }
+
+    fun saveToken(tokenValue: String) {
+        Timber.i("saveToken($tokenValue) called")
+        RepositoryController.putToken(tokenValue)
+    }
 }

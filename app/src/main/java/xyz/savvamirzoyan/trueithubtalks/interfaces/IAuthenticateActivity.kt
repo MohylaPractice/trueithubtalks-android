@@ -1,5 +1,6 @@
 package xyz.savvamirzoyan.trueithubtalks.interfaces
 
-interface IBackButtonOnly {
+interface IAuthenticateActivity {
     fun showBackButton(value: Boolean)
+    fun moveToMainActivity()
 }
