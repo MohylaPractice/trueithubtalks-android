@@ -13,4 +13,8 @@ interface ApiInterface {
     @POST("login")
     fun sendCredentials(@Body credentials: Credentials): Call<LoginResponse>
 
+    @Headers("Content-Type: application/json")
+    @POST("signup")
+    fun createUser(@Body credentials: Credentials): Call<LoginResponse>
+
 }

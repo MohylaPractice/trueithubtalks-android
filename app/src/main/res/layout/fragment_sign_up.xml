@@ -15,7 +15,7 @@
             android:background="@color/grey_800">
 
             <EditText
-                android:id="@+id/editTextTextPersonName"
+                android:id="@+id/editTextName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
@@ -46,8 +46,8 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/password_title"
                 android:theme="@style/SubText"
-                app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName"
-                app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+                app:layout_constraintStart_toStartOf="@+id/editTextName"
+                app:layout_constraintTop_toBottomOf="@+id/editTextName" />
 
             <TextView
                 android:id="@+id/textView8"
@@ -56,35 +56,35 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/password_again_title"
                 android:theme="@style/SubText"
-                app:layout_constraintStart_toStartOf="@+id/editTextTextPassword2"
-                app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword2" />
+                app:layout_constraintStart_toStartOf="@+id/editTextPassword"
+                app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 
             <EditText
-                android:id="@+id/editTextTextPassword"
+                android:id="@+id/editTextPasswordCopy"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:ems="10"
                 android:inputType="textPassword"
                 android:theme="@style/AccentEditText"
-                app:layout_constraintEnd_toEndOf="@+id/editTextTextPassword2"
+                app:layout_constraintEnd_toEndOf="@+id/editTextPassword"
                 app:layout_constraintStart_toStartOf="@+id/textView8"
                 app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
             <EditText
-                android:id="@+id/editTextTextPassword2"
+                android:id="@+id/editTextPassword"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:ems="10"
                 android:inputType="textPassword"
                 android:theme="@style/AccentEditText"
-                app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName"
+                app:layout_constraintEnd_toEndOf="@+id/editTextName"
                 app:layout_constraintStart_toStartOf="@+id/textView7"
                 app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/buttonSignUp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
@@ -92,9 +92,9 @@
                 android:text="@string/sign_up"
                 android:theme="@style/AccentButtonEnabled"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/editTextTextPassword"
-                app:layout_constraintStart_toStartOf="@+id/editTextTextPassword"
-                app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword"
+                app:layout_constraintEnd_toEndOf="@+id/editTextPasswordCopy"
+                app:layout_constraintStart_toStartOf="@+id/editTextPasswordCopy"
+                app:layout_constraintTop_toBottomOf="@+id/editTextPasswordCopy"
                 app:layout_constraintVertical_bias="1.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

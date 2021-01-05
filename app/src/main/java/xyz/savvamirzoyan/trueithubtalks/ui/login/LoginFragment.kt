@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.databinding.FragmentLoginBinding
+import xyz.savvamirzoyan.trueithubtalks.ui.toInt
 
 
 class LoginFragment : Fragment() {
@@ -38,8 +39,11 @@ class LoginFragment : Fragment() {
 
         setTokenObserver()
 
-        binding.editTextName.text.insert(0, viewModel.userName.value!!)
-        binding.editTextPassword.text.insert(0, viewModel.userPassword.value!!)
+        binding.editTextName.text.insert(0, viewModel.userName)
+        binding.editTextPassword.text.insert(0, viewModel.userPassword)
+
+        binding.buttonLogin.isEnabled = viewModel.isLoginButtonEnabled
+        setAlphaByBoolean(binding.buttonLogin, viewModel.isLoginButtonEnabled)
 
         return binding.root
     }
@@ -160,11 +164,7 @@ class LoginFragment : Fragment() {
                 binding.textViewInvalidCredentials.visibility = View.VISIBLE
             } else {
                 binding.textViewInvalidCredentials.visibility = View.INVISIBLE
-
-
             }
         })
     }
 }
-
-private fun Boolean.toInt(): Int = if (this) 1 else 0

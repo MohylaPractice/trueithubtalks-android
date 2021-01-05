@@ -6,23 +6,22 @@ import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.repository.RepositoryController
 
 class LoginViewModel : ViewModel() {
-    private var nameFilled = MutableLiveData<Boolean>()
-    private var passwordFilled = MutableLiveData<Boolean>()
+
     var token = MutableLiveData<String>()
 
-    val isLoginButtonEnabled: Boolean
-        get() = (nameFilled.value == true) and (passwordFilled.value == true)
+    private var nameFilled = false
+    private var passwordFilled = false
+    var userName = ""
+    var userPassword = ""
 
-    var userName = MutableLiveData("name")
-    var userPassword = MutableLiveData("password")
+    val isLoginButtonEnabled: Boolean
+        get() = (nameFilled and passwordFilled)
 
     init {
         Timber.i("initialized")
 
-        nameFilled.value =
-            userName.value!!.isNotBlank() and userName.value!!.isNotEmpty()
-        passwordFilled.value =
-            userPassword.value!!.isNotBlank() and userPassword.value!!.isNotEmpty()
+        nameFilled = userName.isNotBlank() and userName.isNotEmpty()
+        passwordFilled = userPassword.isNotBlank() and userPassword.isNotEmpty()
     }
 
     override fun onCleared() {
@@ -32,15 +31,14 @@ class LoginViewModel : ViewModel() {
 
     fun updateNameFilled(name: String) {
         Timber.i("updateNameFilled() called | name: $name")
-        userName.value = name
-        nameFilled.value = userName.value!!.isNotBlank() and userName.value!!.isNotEmpty()
+        userName = name
+        nameFilled = userName.isNotBlank() and userName.isNotEmpty()
     }
 
     fun updatePasswordFilled(password: String) {
         Timber.i("updatePasswordFilled() called | password: $password")
-        userPassword.value = password
-        passwordFilled.value =
-            userPassword.value!!.isNotBlank() and userPassword.value!!.isNotEmpty()
+        userPassword = password
+        passwordFilled = userPassword.isNotBlank() and userPassword.isNotEmpty()
     }
 
     fun sendCredentials(name: String, password: String) {

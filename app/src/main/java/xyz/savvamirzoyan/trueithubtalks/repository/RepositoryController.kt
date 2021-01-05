@@ -10,4 +10,9 @@ object RepositoryController {
         Timber.i("sendCredentials($name, $password) called")
         APIController.sendCredentials(name, password, token)
     }
+
+    fun createUser(name: String, password: String, token: MutableLiveData<String>) {
+        Timber.i("sendCredentials($name, $password) called")
+        APIController.createUser(name, password, token)
+    }
 }

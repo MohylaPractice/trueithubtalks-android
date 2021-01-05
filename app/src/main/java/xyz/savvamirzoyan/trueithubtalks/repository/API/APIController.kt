@@ -35,4 +35,29 @@ object APIController {
         })
     }
 
+    fun createUser(name: String, password: String, token: MutableLiveData<String>) {
+        Timber.i("createUser($name, $password) called")
+
+        val call = RetrofitClient.apiInterface.createUser(Credentials(name, password))
+        call.enqueue(object : Callback<LoginResponse> {
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                Timber.i("createUser() -> onResponse() called")
+
+                token.value = if (response.body() != null) {
+                    response.body()!!.token
+                } else {
+                    ""
+                }
+
+                Timber.i("createUser() -> onResponse() -> token.value: '${token.value}'")
+            }
+
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                Timber.i("createUser() -> onFailure")
+                Timber.i("call: $call")
+                Timber.i("t: $t")
+            }
+        })
+    }
+
 }
