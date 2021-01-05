@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -40,9 +39,6 @@ class SignUpFragment : Fragment() {
         setSignUpClickListener()
 
         setTokenObserver()
-
-        setHasOptionsMenu(true)
-        (activity as IAuthenticateActivity).showBackButton(true)
 
         binding.editTextName.text.insert(0, viewModel.userName)
         binding.editTextPassword.text.insert(0, viewModel.userPassword)
@@ -112,12 +108,6 @@ class SignUpFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         Timber.i("onViewCreated() called")
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Timber.i("onOptionsItemSelected() called")
-        activity?.onBackPressed()
-        return true
     }
 
     private fun setOnChangedNameListener() {

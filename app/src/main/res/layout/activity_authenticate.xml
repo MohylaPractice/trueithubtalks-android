@@ -6,12 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".ui.AuthenticateActivity">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/nav_host_fragment"
+    <fragment
+        android:id="@+id/authenticate_nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/navigation" />
+        app:navGraph="@navigation/navigation_auth" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

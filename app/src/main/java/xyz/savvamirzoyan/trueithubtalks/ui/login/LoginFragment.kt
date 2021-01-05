@@ -48,8 +48,6 @@ class LoginFragment : Fragment() {
         setOnChangedPasswordListener()
         setTokenObserver()
 
-        (activity as IAuthenticateActivity).showBackButton(false)
-
         return binding.root
     }
 

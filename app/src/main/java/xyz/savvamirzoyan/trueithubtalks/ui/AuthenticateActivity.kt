@@ -3,20 +3,27 @@ package xyz.savvamirzoyan.trueithubtalks.ui
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
+import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.R
 import xyz.savvamirzoyan.trueithubtalks.interfaces.IAuthenticateActivity
 
 class AuthenticateActivity : AppCompatActivity(), IAuthenticateActivity {
 
-    private val activity = this
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authenticate)
 
         Timber.i("onCreate() called")
+
+        val navController = this.findNavController(R.id.authenticate_nav_host_fragment)
+        NavigationUI.setupActionBarWithNavController(this, navController)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = this.findNavController(R.id.authenticate_nav_host_fragment)
+        return navController.navigateUp()
     }
 
     override fun onResume() {
@@ -42,19 +49,6 @@ class AuthenticateActivity : AppCompatActivity(), IAuthenticateActivity {
     override fun onRestart() {
         super.onRestart()
         Timber.i("onRestart() Called")
-    }
-
-    override fun showBackButton(value: Boolean) {
-        this.supportActionBar?.setDisplayHomeAsUpEnabled(value)
-    }
-
-    override fun onBackPressed() {
-        val fragmentManager: FragmentManager = supportFragmentManager
-        if (fragmentManager.backStackEntryCount > 1) {
-            fragmentManager.popBackStackImmediate()
-        } else {
-            super.onBackPressed()
-        }
     }
 
     override fun moveToMainActivity() {

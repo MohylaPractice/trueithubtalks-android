@@ -11,4 +11,6 @@
     <string name="welcome_back_title">Welcome back,</string>
     <string name="password_again_title">Password (again)</string>
     <string name="error_invalid_name_or_password">Invalid name or password</string>
+    <string name="fragment_title_login">TIH Talks</string>
+    <string name="fragment_title_signup">Sign-up</string>
 </resources>

@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="xyz.savvamirzoyan.trueithubtalks.ui.login.LoginFragment"
-        android:label="fragment_login"
+        android:label="@string/fragment_title_login"
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_signUpFragment"
@@ -17,5 +17,6 @@
     <fragment
         android:id="@+id/signUpFragment"
         android:name="xyz.savvamirzoyan.trueithubtalks.ui.signup.SignUpFragment"
-        android:label="SignUpFragment" />
+        android:label="@string/fragment_title_signup"
+        tools:layout="@layout/fragment_sign_up" />
 </navigation>
