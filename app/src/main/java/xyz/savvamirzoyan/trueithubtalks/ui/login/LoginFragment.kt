@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.databinding.FragmentLoginBinding
+import xyz.savvamirzoyan.trueithubtalks.interfaces.IBackButtonOnly
 import xyz.savvamirzoyan.trueithubtalks.ui.toInt
 
 
@@ -38,6 +39,8 @@ class LoginFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
         setTokenObserver()
+
+        (activity as IBackButtonOnly).showBackButton(false)
 
         binding.editTextName.text.insert(0, viewModel.userName)
         binding.editTextPassword.text.insert(0, viewModel.userPassword)

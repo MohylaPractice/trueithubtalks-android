@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TIHTalks"
         tools:ignore="AllowBackup">
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.AuthenticateActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

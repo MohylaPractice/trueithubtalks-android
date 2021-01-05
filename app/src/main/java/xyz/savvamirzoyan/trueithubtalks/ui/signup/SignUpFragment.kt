@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.databinding.FragmentSignUpBinding
+import xyz.savvamirzoyan.trueithubtalks.interfaces.IBackButtonOnly
 import xyz.savvamirzoyan.trueithubtalks.ui.toInt
 
 
@@ -32,12 +34,16 @@ class SignUpFragment : Fragment() {
         // ViewModel
         viewModel = ViewModelProvider(this).get(SignUpViewModel::class.java)
 
+        // Setting listeners and values
         setOnChangedNameListener()
         setOnChangedPasswordListener()
         setOnChangedPasswordCopyListener()
         setSignUpClickListener()
 
         setTokenObserver()
+
+        setHasOptionsMenu(true)
+        (activity as IBackButtonOnly).showBackButton(true)
 
         binding.editTextName.text.insert(0, viewModel.userName)
         binding.editTextPassword.text.insert(0, viewModel.userPassword)
@@ -107,6 +113,17 @@ class SignUpFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         Timber.i("onViewCreated() called")
+    }
+
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        super.onCreateOptionsMenu(menu, inflater)
+//        Timber.i("opCreateOptionsMenu() called")
+//    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Timber.i("onOptionsItemSelected() called")
+        activity?.onBackPressed()
+        return true
     }
 
     private fun setOnChangedNameListener() {

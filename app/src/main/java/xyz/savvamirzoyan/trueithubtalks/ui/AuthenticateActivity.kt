@@ -2,13 +2,15 @@ package xyz.savvamirzoyan.trueithubtalks.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.R
+import xyz.savvamirzoyan.trueithubtalks.interfaces.IBackButtonOnly
 
-class MainActivity : AppCompatActivity() {
+class AuthenticateActivity : AppCompatActivity(), IBackButtonOnly {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_authenticate)
 
         Timber.i("onCreate() called")
     }
@@ -38,6 +40,18 @@ class MainActivity : AppCompatActivity() {
         Timber.i("onRestart() Called")
     }
 
+    override fun showBackButton(value: Boolean) {
+        this.supportActionBar?.setDisplayHomeAsUpEnabled(value)
+    }
+
+    override fun onBackPressed() {
+        val fragmentManager: FragmentManager = supportFragmentManager
+        if (fragmentManager.backStackEntryCount > 1) {
+            fragmentManager.popBackStackImmediate()
+        } else {
+            super.onBackPressed()
+        }
+    }
 }
 
 fun Boolean.toInt(): Int = if (this) 1 else 0
