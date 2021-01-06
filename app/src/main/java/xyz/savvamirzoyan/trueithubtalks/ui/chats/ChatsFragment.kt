@@ -8,11 +8,11 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.R
-import xyz.savvamirzoyan.trueithubtalks.databinding.ChatsFragmentBinding
+import xyz.savvamirzoyan.trueithubtalks.databinding.FragmentChatsBinding
 
 class ChatsFragment : Fragment() {
 
-    private lateinit var binding: ChatsFragmentBinding
+    private lateinit var binding: FragmentChatsBinding
     private lateinit var viewModel: ChatsViewModel
 
     override fun onCreateView(
@@ -23,7 +23,7 @@ class ChatsFragment : Fragment() {
         setHasOptionsMenu(true)
 
         // Binding
-        binding = ChatsFragmentBinding.inflate(inflater, container, false)
+        binding = FragmentChatsBinding.inflate(inflater, container, false)
 
         // ViewModel
         viewModel = ViewModelProvider(this).get(ChatsViewModel::class.java)
