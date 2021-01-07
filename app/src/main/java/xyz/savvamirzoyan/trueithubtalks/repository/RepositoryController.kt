@@ -3,14 +3,16 @@ package xyz.savvamirzoyan.trueithubtalks.repository
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import timber.log.Timber
+import xyz.savvamirzoyan.trueithubtalks.interfaces.ISharedPreferencesController
 import xyz.savvamirzoyan.trueithubtalks.repository.API.APIController
 import xyz.savvamirzoyan.trueithubtalks.repository.storage.SharedPreferencesController
 
 object RepositoryController {
 
-    private lateinit var preferencesController: SharedPreferencesController
+    private lateinit var preferencesController: ISharedPreferencesController
 
     fun setPreferencesController(activity: FragmentActivity) {
+        Timber.i("setPreferencesController() called")
         preferencesController = SharedPreferencesController(activity)
     }
 
@@ -25,10 +27,21 @@ object RepositoryController {
     }
 
     fun getToken(token: MutableLiveData<String>) {
+        Timber.i("getToken() called")
         preferencesController.getToken(token)
     }
 
     fun putToken(tokenValue: String) {
+        Timber.i("putToken() called")
         preferencesController.putToken(tokenValue)
+    }
+
+    fun getUserInfoByToken(
+        name: MutableLiveData<String>,
+        username: MutableLiveData<String>,
+        bio: MutableLiveData<String>
+    ) {
+        Timber.i("getUserInfoByToken() called")
+        APIController.getUserInfoByToken(preferencesController.getTokenValue(), name, username, bio)
     }
 }

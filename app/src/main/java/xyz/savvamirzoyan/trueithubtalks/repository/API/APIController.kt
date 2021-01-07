@@ -6,7 +6,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.repository.API.request.Credentials
+import xyz.savvamirzoyan.trueithubtalks.repository.API.request.CredentialsToken
 import xyz.savvamirzoyan.trueithubtalks.repository.API.response.LoginResponse
+import xyz.savvamirzoyan.trueithubtalks.repository.API.response.UserInfoResponse
 
 object APIController {
 
@@ -60,4 +62,32 @@ object APIController {
         })
     }
 
+    fun getUserInfoByToken(
+        token: String,
+        name: MutableLiveData<String>,
+        username: MutableLiveData<String>,
+        bio: MutableLiveData<String>
+    ) {
+        Timber.i("getUserInfoByToken() called")
+
+        val call = RetrofitClient.apiInterface.getUserInfoByToken(CredentialsToken(token))
+        call.enqueue(object : Callback<UserInfoResponse> {
+            override fun onResponse(
+                call: Call<UserInfoResponse>,
+                response: Response<UserInfoResponse>
+            ) {
+                Timber.i("getUserInfoByToken() -> onResponse() called")
+
+                if (response.body() != null) {
+                    name.value = response.body()!!.name
+                    username.value = response.body()!!.username
+                    bio.value = response.body()!!.bio
+                }
+            }
+
+            override fun onFailure(call: Call<UserInfoResponse>, t: Throwable) {
+                Timber.i("getUserInfoByToken() -> onFailure() called")
+            }
+        })
+    }
 }

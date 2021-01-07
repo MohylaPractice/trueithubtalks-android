@@ -23,5 +23,14 @@
         android:id="@+id/accountFragment"
         android:name="xyz.savvamirzoyan.trueithubtalks.ui.account.AccountFragment"
         android:label="@string/fragment_title_account"
-        tools:layout="@layout/fragment_account" />
+        tools:layout="@layout/fragment_account">
+        <action
+            android:id="@+id/action_accountFragment_to_bioEditFragment"
+            app:destination="@id/bioEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bioEditFragment"
+        android:name="xyz.savvamirzoyan.trueithubtalks.ui.account.BioEditFragment"
+        android:label="@string/fragment_title_edit_bio"
+        tools:layout="@layout/fragment_bio_edit" />
 </navigation>
