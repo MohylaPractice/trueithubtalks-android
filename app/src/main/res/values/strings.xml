@@ -49,4 +49,5 @@
     <string name="username">Username</string>
     <string name="write_about_yourself_hint">Write about yourself…</string>
     <string name="fragment_title_edit_bio">Edit bio</string>
+    <string name="search">Search</string>
 </resources>

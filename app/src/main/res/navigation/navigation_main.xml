@@ -9,7 +9,11 @@
         android:id="@+id/chatsFragment"
         android:name="xyz.savvamirzoyan.trueithubtalks.ui.chats.ChatsFragment"
         android:label="@string/fragment_title_chats"
-        tools:layout="@layout/fragment_chats" />
+        tools:layout="@layout/fragment_chats">
+        <action
+            android:id="@+id/action_chatsFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
     <fragment
         android:id="@+id/aboutFragment"
         android:name="xyz.savvamirzoyan.trueithubtalks.ui.about.AboutFragment"
@@ -20,4 +24,9 @@
         android:name="xyz.savvamirzoyan.trueithubtalks.ui.account.AccountFragment"
         android:label="@string/fragment_title_account"
         tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="xyz.savvamirzoyan.trueithubtalks.ui.search.SearchFragment"
+        android:label="@string/search"
+        tools:layout="@layout/fragment_search" />
 </navigation>

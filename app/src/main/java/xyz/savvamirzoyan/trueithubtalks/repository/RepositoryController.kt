@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.interfaces.ISharedPreferencesController
 import xyz.savvamirzoyan.trueithubtalks.repository.API.APIController
+import xyz.savvamirzoyan.trueithubtalks.repository.model.UserSearch
 import xyz.savvamirzoyan.trueithubtalks.repository.storage.SharedPreferencesController
 
 object RepositoryController {
@@ -42,5 +43,10 @@ object RepositoryController {
     ) {
         Timber.i("getUserInfoByToken() called")
         APIController.getUserInfoByToken(preferencesController.getTokenValue(), name, pictureUrl)
+    }
+
+    fun searchUserByUsername(username: String, users: MutableLiveData<List<UserSearch>>) {
+        Timber.i("searchUserByUsername() called")
+        APIController.searchUserByUsername(preferencesController.getTokenValue(), username, users)
     }
 }
