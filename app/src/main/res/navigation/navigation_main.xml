@@ -44,8 +44,5 @@
         <argument
             android:name="username"
             app:argType="string" />
-        <argument
-            android:name="pictureUrl"
-            app:argType="string" />
     </fragment>
 </navigation>

@@ -29,6 +29,10 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    fun setCustomActionBarTitle(title: String) {
+        supportActionBar?.title = title
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         val navController = this.findNavController(R.id.main_nav_host_fragment)
         return NavigationUI.navigateUp(navController, drawerLayout)

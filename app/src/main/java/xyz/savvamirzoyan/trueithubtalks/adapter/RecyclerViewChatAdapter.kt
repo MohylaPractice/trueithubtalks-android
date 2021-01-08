@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.R
 import xyz.savvamirzoyan.trueithubtalks.repository.model.ChatMessage
 
@@ -20,7 +21,7 @@ class RecyclerViewChatAdapter(private val messages: ArrayList<ChatMessage>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val TYPE_MESSAGE_ME = 0
-    private val TYPE_MESSAGE_OTHER = 0
+    private val TYPE_MESSAGE_OTHER = 1
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -52,10 +53,13 @@ class RecyclerViewChatAdapter(private val messages: ArrayList<ChatMessage>) :
 
     override fun getItemCount(): Int = messages.size
 
-    override fun getItemViewType(position: Int): Int = if (messages[position].isMe) {
-        TYPE_MESSAGE_ME
-    } else {
-        TYPE_MESSAGE_OTHER
+    override fun getItemViewType(position: Int): Int {
+        Timber.i("getItemViewType($position) called | isMe: ${messages[position].isMe}")
+        return if (messages[position].isMe) {
+            TYPE_MESSAGE_ME
+        } else {
+            TYPE_MESSAGE_OTHER
+        }
     }
 
     fun addMessage(message: ChatMessage) {

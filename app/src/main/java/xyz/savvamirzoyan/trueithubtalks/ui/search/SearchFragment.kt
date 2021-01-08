@@ -64,7 +64,7 @@ class SearchFragment : Fragment(), RecyclerViewItemClickListener {
         val user = userFoundRecyclerViewAdapter.getUserByPosition(position)
 
         val action =
-            SearchFragmentDirections.actionSearchFragmentToChatFragment(user.name, user.pictureUrl)
+            SearchFragmentDirections.actionSearchFragmentToChatFragment(user.name)
         NavHostFragment.findNavController(this).navigate(action)
     }
 }
