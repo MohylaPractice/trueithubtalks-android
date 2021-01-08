@@ -65,8 +65,7 @@ object APIController {
     fun getUserInfoByToken(
         token: String,
         name: MutableLiveData<String>,
-        username: MutableLiveData<String>,
-        bio: MutableLiveData<String>
+        pictureUrl: MutableLiveData<String>
     ) {
         Timber.i("getUserInfoByToken() called")
 
@@ -79,9 +78,8 @@ object APIController {
                 Timber.i("getUserInfoByToken() -> onResponse() called")
 
                 if (response.body() != null) {
-                    name.value = response.body()!!.name
-                    username.value = response.body()!!.username
-                    bio.value = response.body()!!.bio
+                    name.value = response.body()!!.username
+                    pictureUrl.value = response.body()!!.pictureUrl
                 }
             }
 

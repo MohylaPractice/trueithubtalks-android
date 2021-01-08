@@ -6,8 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment
-import xyz.savvamirzoyan.trueithubtalks.R
+import com.squareup.picasso.Picasso
 import xyz.savvamirzoyan.trueithubtalks.databinding.FragmentAccountBinding
 
 class AccountFragment : Fragment() {
@@ -27,37 +26,22 @@ class AccountFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(AccountViewModel::class.java)
 
         setOnChangedNameListener()
-        setOnChangedUserNameListener()
-        setOnChangedBioListener()
-
-        setBioOnClickListener()
+        setOnChangedPictureUrl()
 
         return binding.root
     }
 
-    private fun setBioOnClickListener() {
-        binding.textViewBio.setOnClickListener {
-            val action = AccountFragmentDirections.actionAccountFragmentToBioEditFragment()
-            NavHostFragment.findNavController(this).navigate(action)
+    private fun setOnChangedPictureUrl() {
+        viewModel.pictureUrl.observe(viewLifecycleOwner) {
+            Picasso.with(binding.imageViewUserPicture.context)
+                .load(viewModel.pictureUrl.value)
+                .into(binding.imageViewUserPicture)
         }
     }
 
     private fun setOnChangedNameListener() {
         viewModel.name.observe(viewLifecycleOwner) {
-            binding.textViewName.text = it
-        }
-    }
-
-    private fun setOnChangedUserNameListener() {
-        viewModel.username.observe(viewLifecycleOwner) {
             binding.textViewUsername.text = it
-        }
-    }
-
-    private fun setOnChangedBioListener() {
-        viewModel.bio.observe(viewLifecycleOwner) {
-            binding.textViewBio.text =
-                if (it != "") it else getString(R.string.write_about_yourself_hint)
         }
     }
 }

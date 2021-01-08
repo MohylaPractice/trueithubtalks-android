@@ -8,14 +8,13 @@ import xyz.savvamirzoyan.trueithubtalks.repository.RepositoryController
 class AccountViewModel : ViewModel() {
 
     val name = MutableLiveData<String>()
-    val username = MutableLiveData<String>()
-    val bio = MutableLiveData<String>()
+    val pictureUrl = MutableLiveData<String>()
 
     init {
         Timber.i("initialized")
 
         // Send request to get info about user
-        RepositoryController.getUserInfoByToken(name, username, bio)
+        RepositoryController.getUserInfoByToken(name, pictureUrl)
     }
 
 }

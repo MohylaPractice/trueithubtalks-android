@@ -38,10 +38,9 @@ object RepositoryController {
 
     fun getUserInfoByToken(
         name: MutableLiveData<String>,
-        username: MutableLiveData<String>,
-        bio: MutableLiveData<String>
+        pictureUrl: MutableLiveData<String>
     ) {
         Timber.i("getUserInfoByToken() called")
-        APIController.getUserInfoByToken(preferencesController.getTokenValue(), name, username, bio)
+        APIController.getUserInfoByToken(preferencesController.getTokenValue(), name, pictureUrl)
     }
 }
