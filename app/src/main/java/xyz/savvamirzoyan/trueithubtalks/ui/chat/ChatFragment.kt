@@ -61,4 +61,9 @@ class ChatFragment : Fragment() {
             binding.recyclerViewChat.scrollToPosition(recyclerViewChatAdapter.itemCount - 1)
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.disconnect()
+    }
 }

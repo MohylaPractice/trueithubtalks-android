@@ -32,6 +32,9 @@ object RepositoryController {
         preferencesController.getToken(token)
     }
 
+    fun getTokenValue(): String = preferencesController.getTokenValue()
+
+
     fun putToken(tokenValue: String) {
         Timber.i("putToken() called")
         preferencesController.putToken(tokenValue)

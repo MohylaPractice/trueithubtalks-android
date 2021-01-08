@@ -58,6 +58,7 @@ private fun getUnsafeClient(): OkHttpClient {
 }
 
 class ChatWebSocketController(
+    private val token: String,
     private val username: String,
     private val lastMessage: MutableLiveData<ChatMessage>
 ) {
@@ -68,6 +69,7 @@ class ChatWebSocketController(
         override fun onOpen(webSocket: WebSocket, response: okhttp3.Response) {
             Timber.i("onOpen() called | response: $response")
             serverSocket = webSocket
+            serverSocket!!.send("""{"type": "open-chat", "data": {"username": "$username", "token": "$token"}}""")
         }
 
         override fun onMessage(webSocket: WebSocket, text: String) {
@@ -92,9 +94,9 @@ class ChatWebSocketController(
         }
     }
 
-    fun sendText(text: String) {
-        Timber.i("sendText($text) called")
-        serverSocket?.send(text)
+    private fun buildInitRequest(username: String): Request.Builder {
+        Timber.i("buildInitRequest($username) called")
+        return Request.Builder().url("wss://192.168.0.107:8083/")
     }
 
     fun connect() {
@@ -102,8 +104,15 @@ class ChatWebSocketController(
         socketClient.newWebSocket(buildInitRequest(username).build(), serverWebSocketListener)
     }
 
-    private fun buildInitRequest(username: String): Request.Builder {
-        Timber.i("buildInitRequest($username) called")
-        return Request.Builder().url("wss://192.168.0.107:8083/")
+    fun disconnect() {
+        Timber.i("disconnect() called")
+        serverSocket?.send("""{"type": "disconnect", "data": {"username": "$username", "token": "$token"}}""")
+        serverSocket?.close(1000, null)
+        serverSocket?.cancel()
+    }
+
+    fun sendText(text: String) {
+        Timber.i("sendText($text) called")
+        serverSocket?.send("""{"type": "send-message", "data": {"username": "$username", "token": "$token", "message": "$text"}}""")
     }
 }
