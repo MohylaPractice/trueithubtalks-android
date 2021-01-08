@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import xyz.savvamirzoyan.trueithubtalks.R
+import xyz.savvamirzoyan.trueithubtalks.interfaces.RecyclerViewItemClickListener
 import xyz.savvamirzoyan.trueithubtalks.repository.model.UserSearch
 
 class UserFoundViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -15,13 +16,23 @@ class UserFoundViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val picture: ImageView = view.findViewById(R.id.imageViewUserSearchPicture)
 }
 
-class UserFoundRecyclerViewAdapter(private var users: List<UserSearch>) :
+class UserFoundRecyclerViewAdapter(
+    private val clickListener: RecyclerViewItemClickListener,
+    private var users: List<UserSearch>
+) :
     RecyclerView.Adapter<UserFoundViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserFoundViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.user_search_item, parent, false)
-        return UserFoundViewHolder(view)
+
+        val viewHolder = UserFoundViewHolder(view)
+
+        viewHolder.itemView.setOnClickListener {
+            clickListener.onItemClick(viewHolder.layoutPosition)
+        }
+
+        return viewHolder
     }
 
     override fun onBindViewHolder(holder: UserFoundViewHolder, position: Int) {
@@ -39,4 +50,6 @@ class UserFoundRecyclerViewAdapter(private var users: List<UserSearch>) :
     fun updateUsers(newUsers: List<UserSearch>) {
         users = newUsers.also { notifyDataSetChanged() }
     }
+
+    fun getUserByPosition(position: Int) = users[position]
 }

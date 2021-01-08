@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_chatsFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_chatsFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"
@@ -28,5 +31,21 @@
         android:id="@+id/searchFragment"
         android:name="xyz.savvamirzoyan.trueithubtalks.ui.search.SearchFragment"
         android:label="@string/search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_searchFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="xyz.savvamirzoyan.trueithubtalks.ui.chat.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat">
+        <argument
+            android:name="username"
+            app:argType="string" />
+        <argument
+            android:name="pictureUrl"
+            app:argType="string" />
+    </fragment>
 </navigation>

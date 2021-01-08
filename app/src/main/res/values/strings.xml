@@ -50,4 +50,5 @@
     <string name="write_about_yourself_hint">Write about yourself…</string>
     <string name="fragment_title_edit_bio">Edit bio</string>
     <string name="search">Search</string>
+    <string name="send_button">Send button</string>
 </resources>

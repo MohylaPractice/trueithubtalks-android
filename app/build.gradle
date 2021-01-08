@@ -45,8 +45,10 @@ android {
 dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
-    implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.preference:preference-ktx:1.1.1'
+    //noinspection GradleDependency
     implementation 'com.squareup.picasso:picasso:2.5.2'
+
     def nav_version = "2.3.2"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

@@ -8,17 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.adapter.UserFoundRecyclerViewAdapter
 import xyz.savvamirzoyan.trueithubtalks.databinding.FragmentSearchBinding
+import xyz.savvamirzoyan.trueithubtalks.interfaces.RecyclerViewItemClickListener
 
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(), RecyclerViewItemClickListener {
 
     private lateinit var binding: FragmentSearchBinding
     private lateinit var viewModel: SearchViewModel
 
-    private val userFoundRecyclerViewAdapter = UserFoundRecyclerViewAdapter(arrayListOf())
+    private val userFoundRecyclerViewAdapter = UserFoundRecyclerViewAdapter(this, arrayListOf())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,5 +58,13 @@ class SearchFragment : Fragment() {
             Timber.i("found users: ${viewModel.foundUserList.value}")
             viewModel.foundUserList.value?.let { it1 -> userFoundRecyclerViewAdapter.updateUsers(it1) }
         }
+    }
+
+    override fun onItemClick(position: Int) {
+        val user = userFoundRecyclerViewAdapter.getUserByPosition(position)
+
+        val action =
+            SearchFragmentDirections.actionSearchFragmentToChatFragment(user.name, user.pictureUrl)
+        NavHostFragment.findNavController(this).navigate(action)
     }
 }
