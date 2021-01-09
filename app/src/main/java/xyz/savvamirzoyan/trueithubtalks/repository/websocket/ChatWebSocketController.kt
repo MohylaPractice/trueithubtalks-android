@@ -2,12 +2,19 @@ package xyz.savvamirzoyan.trueithubtalks.repository.websocket
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
+import org.json.JSONObject
 import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.repository.model.ChatMessage
+import xyz.savvamirzoyan.trueithubtalks.repository.model.jsonconvertable.MessageFactory
+import xyz.savvamirzoyan.trueithubtalks.repository.model.jsonconvertable.Wrapper
+import xyz.savvamirzoyan.trueithubtalks.repository.model.jsonconvertable.income.TextMessageIncome
 import java.net.SocketException
 import java.security.SecureRandom
 import java.security.cert.CertificateException
@@ -73,12 +80,20 @@ class ChatWebSocketController(
         override fun onOpen(webSocket: WebSocket, response: okhttp3.Response) {
             Timber.i("onOpen() called | response: $response")
             serverSocket = webSocket
-            serverSocket!!.send("""{"type": "open-chat", "data": {"username": "$username", "token": "$token"}}""")
+
+            val json = Json.encodeToString(MessageFactory.openChatAction(username, token))
+
+            serverSocket!!.send(json)
         }
 
         override fun onMessage(webSocket: WebSocket, text: String) {
             Timber.i("onMessage() called | text: $text")
-            lastMessage.postValue(ChatMessage(text, false))
+
+            val type = JSONObject(text).get("type")
+            if (type == "new-message") {
+                val textMessage = Json.decodeFromString<Wrapper<TextMessageIncome>>(text).data
+                lastMessage.postValue(ChatMessage(textMessage.message, false))
+            }
         }
 
         override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
@@ -115,13 +130,18 @@ class ChatWebSocketController(
 
     fun disconnect() {
         Timber.i("disconnect() called")
-        serverSocket?.send("""{"type": "disconnect", "data": {"username": "$username", "token": "$token"}}""")
-//        serverSocket?.close(1000, null)
-//        serverSocket?.cancel()
+
+        val json = Json.encodeToString(MessageFactory.disconnectAction(username, token))
+
+        serverSocket?.send(json)
+        serverSocket?.close(1000, null)
+        serverSocket?.cancel()
     }
 
     fun sendText(text: String) {
         Timber.i("sendText($text) called")
-        serverSocket?.send("""{"type": "send-message", "data": {"username": "$username", "token": "$token", "message": "$text"}}""")
+
+        val json = Json.encodeToString(MessageFactory.textMessage(username, token, text))
+        serverSocket?.send(json)
     }
 }
