@@ -8,9 +8,11 @@ import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.repository.model.ChatMessage
+import java.net.SocketException
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
+import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLContext
 import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.TrustManager
@@ -51,6 +53,7 @@ private fun getUnsafeClient(): OkHttpClient {
         val builder = OkHttpClient.Builder()
         builder.sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
         builder.hostnameVerifier { _, _ -> true }
+        builder.pingInterval(30, TimeUnit.SECONDS)
         builder.build()
     } catch (e: Exception) {
         throw RuntimeException(e)
@@ -65,6 +68,7 @@ class ChatWebSocketController(
 
     private val socketClient = getUnsafeClient()
     private var serverSocket: WebSocket? = null
+
     private val serverWebSocketListener = object : WebSocketListener() {
         override fun onOpen(webSocket: WebSocket, response: okhttp3.Response) {
             Timber.i("onOpen() called | response: $response")
@@ -89,8 +93,13 @@ class ChatWebSocketController(
             t: Throwable,
             response: okhttp3.Response?
         ) {
-            Timber.i("onFailure() called | t: $t | response: $response")
-            if (t is java.io.EOFException) connect()
+            Timber.i("onFailure() called | t: $t ${t.localizedMessage} | response: $response")
+            if (t is SocketException) {
+                serverSocket = null
+            }
+            if (t is java.io.EOFException) {
+                connect()
+            }
         }
     }
 
@@ -107,8 +116,8 @@ class ChatWebSocketController(
     fun disconnect() {
         Timber.i("disconnect() called")
         serverSocket?.send("""{"type": "disconnect", "data": {"username": "$username", "token": "$token"}}""")
-        serverSocket?.close(1000, null)
-        serverSocket?.cancel()
+//        serverSocket?.close(1000, null)
+//        serverSocket?.cancel()
     }
 
     fun sendText(text: String) {

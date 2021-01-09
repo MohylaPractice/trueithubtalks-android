@@ -50,6 +50,7 @@ class ChatFragment : Fragment() {
             if (text.isNotEmpty() && text.isNotBlank()) {
                 viewModel.sendText(text)
                 recyclerViewChatAdapter.addMessage(ChatMessage(text, true))
+                binding.recyclerViewChat.scrollToPosition(recyclerViewChatAdapter.itemCount - 1)
                 binding.editTextMessage.text.clear()
             }
         }
