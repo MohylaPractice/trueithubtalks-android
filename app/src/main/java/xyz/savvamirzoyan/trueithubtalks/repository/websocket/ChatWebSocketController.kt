@@ -124,8 +124,9 @@ class ChatWebSocketController(
             Timber.i("onFailure() called | t: $t ${t.localizedMessage} | response: $response")
             if (t is SocketException) {
                 serverSocket = null
-            }
-            if (t is java.io.EOFException) {
+                webSocket.close(1000, null)
+                webSocket.cancel()
+            } else if (t is java.io.EOFException) {
                 connect()
             }
         }
@@ -147,8 +148,6 @@ class ChatWebSocketController(
         val json = Json.encodeToString(MessageFactory.disconnectAction(username, token))
 
         serverSocket?.send(json)
-        serverSocket?.close(1000, null)
-        serverSocket?.cancel()
     }
 
     fun sendText(text: String) {

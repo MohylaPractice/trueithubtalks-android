@@ -60,6 +60,7 @@ class ChatFragment : Fragment() {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
+        @Suppress("DEPRECATION")
         super.onActivityCreated(savedInstanceState)
         // Hide soft keyboard
         val imm: InputMethodManager =
@@ -70,7 +71,11 @@ class ChatFragment : Fragment() {
     private fun setOnChangedMessageHistoryListener() {
         viewModel.messageHistory.observe(viewLifecycleOwner) {
             it.forEach { chatMessage -> recyclerViewChatAdapter.addMessage(chatMessage) }
-            binding.recyclerViewChat.smoothScrollToPosition(recyclerViewChatAdapter.itemCount - 1)
+            if (recyclerViewChatAdapter.itemCount >= 1) {
+                binding.recyclerViewChat.smoothScrollToPosition(
+                    recyclerViewChatAdapter.itemCount - 1
+                )
+            }
         }
     }
 
