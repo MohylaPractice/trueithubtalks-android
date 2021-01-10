@@ -70,7 +70,8 @@ private fun getUnsafeClient(): OkHttpClient {
 class ChatWebSocketController(
     private val token: String,
     private val username: String,
-    private val lastMessage: MutableLiveData<ChatMessage>
+    private val lastMessage: MutableLiveData<ChatMessage>,
+    private val messageHistory: MutableLiveData<ArrayList<ChatMessage>>
 ) {
 
     private val socketClient = getUnsafeClient()
@@ -93,6 +94,18 @@ class ChatWebSocketController(
             if (type == "new-message") {
                 val textMessage = Json.decodeFromString<Wrapper<TextMessageIncome>>(text).data
                 lastMessage.postValue(ChatMessage(textMessage.message, false))
+            } else if (type == "message-history") {
+                val messagesRaw =
+                    Json.decodeFromString<Wrapper<ArrayList<TextMessageIncome>>>(text).data
+
+                val messagesPrepared = arrayListOf<ChatMessage>()
+                messagesPrepared.addAll(messagesRaw.map {
+                    ChatMessage(
+                        it.message,
+                        it.username == username
+                    )
+                })
+                messageHistory.postValue(messagesPrepared)
             }
         }
 

@@ -62,9 +62,7 @@ class SearchFragment : Fragment(), RecyclerViewItemClickListener {
 
     override fun onItemClick(position: Int) {
         val user = userFoundRecyclerViewAdapter.getUserByPosition(position)
-
-        val action =
-            SearchFragmentDirections.actionSearchFragmentToChatFragment(user.name)
+        val action = SearchFragmentDirections.actionSearchFragmentToChatFragment(user.name)
         NavHostFragment.findNavController(this).navigate(action)
     }
 }

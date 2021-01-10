@@ -10,8 +10,10 @@ import xyz.savvamirzoyan.trueithubtalks.repository.websocket.ChatWebSocketContro
 class ChatViewModel(username: String) : ViewModel() {
 
     val lastMessage = MutableLiveData<ChatMessage>()
+    val messageHistory = MutableLiveData<ArrayList<ChatMessage>>()
     private val token = RepositoryController.getTokenValue()
-    private val webSocketController = ChatWebSocketController(token, username, lastMessage)
+    private val webSocketController =
+        ChatWebSocketController(token, username, lastMessage, messageHistory)
 
     init {
         Timber.i("initialized")
