@@ -6,5 +6,13 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:ignore="UselessLeaf" />
+        tools:ignore="UselessLeaf">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewChats"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            tools:listitem="@layout/user_in_chats_item" />
+    </FrameLayout>
 </layout>

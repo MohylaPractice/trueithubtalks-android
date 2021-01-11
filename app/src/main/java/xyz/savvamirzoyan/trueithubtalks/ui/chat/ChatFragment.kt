@@ -44,16 +44,6 @@ class ChatFragment : Fragment() {
         setOnChangedMessageHistoryListener()
         setOnClickButtonSendListener()
 
-        // Show action bar, scroll to the last message on soft keyboard open
-//        binding.editTextMessage.setOnFocusChangeListener { _, hasFocus ->
-//            Toast.makeText(context, "$hasFocus", Toast.LENGTH_SHORT).show()
-//            if (hasFocus) {
-//                Toast.makeText(context, "Set focus", Toast.LENGTH_SHORT).show()
-//
-//                binding.recyclerViewChat.smoothScrollToPosition(recyclerViewChatAdapter.itemCount)
-//            }
-//        }
-
         (activity as MainActivity).setCustomActionBarTitle(bundleArgs.username)
 
         return binding.root

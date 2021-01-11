@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/imageViewUserSearchPicture"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:theme="@style/TitleText"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewUserSearchPicture"
         app:layout_constraintStart_toEndOf="@+id/imageViewUserSearchPicture"
         app:layout_constraintTop_toTopOf="@+id/imageViewUserSearchPicture"
         tools:text="John Doe" />

@@ -13,7 +13,7 @@ import javax.net.ssl.X509TrustManager
 
 object RetrofitClient {
 
-    private const val mainEndpoint = "https://192.168.0.107:8083/"
+    private const val mainEndpoint = "https://192.168.0.105:8083/"
 
     private val retrofitClient: Retrofit.Builder by lazy {
         val okHttpClient = OkHttpClient.Builder()

@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.repository.RepositoryController
 import xyz.savvamirzoyan.trueithubtalks.repository.model.ChatMessage
-import xyz.savvamirzoyan.trueithubtalks.repository.websocket.ChatWebSocketController
+import xyz.savvamirzoyan.trueithubtalks.repository.websocket.WebSocketController
 
 class ChatViewModel(username: String) : ViewModel() {
 
@@ -13,13 +13,13 @@ class ChatViewModel(username: String) : ViewModel() {
     val messageHistory = MutableLiveData<ArrayList<ChatMessage>>()
     private val token = RepositoryController.getTokenValue()
     private val webSocketController =
-        ChatWebSocketController(token, username, lastMessage, messageHistory)
+        WebSocketController.SingleChatController(token, username, lastMessage, messageHistory)
 
     init {
         Timber.i("initialized")
 
         // Initialize connection with WebSocket
-        webSocketController.connect()
+        webSocketController.connectToChat()
     }
 
     fun disconnect() {

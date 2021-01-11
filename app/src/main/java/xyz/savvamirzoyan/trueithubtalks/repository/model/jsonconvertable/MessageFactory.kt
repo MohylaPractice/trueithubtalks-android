@@ -16,4 +16,12 @@ object MessageFactory {
         return Wrapper("open-chat", OpenChat(username, token))
     }
 
+    fun connectToChatsFeed(token: String): Wrapper<ConnectionChatsFeed> {
+        return Wrapper("subscribe-chats-feed", ConnectionChatsFeed(token))
+    }
+
+    fun disconnectFromChatsFeedAction(token: String): Wrapper<ConnectionChatsFeed> {
+        return Wrapper("unsubscribe-chats-feed", ConnectionChatsFeed(token))
+    }
+
 }
