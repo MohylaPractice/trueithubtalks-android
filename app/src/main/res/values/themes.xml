@@ -23,5 +23,7 @@
         <item name="colorOnBackground">@color/white</item>
         <item name="colorOnSurface">@color/white</item>
         <item name="colorOnError">@color/white</item>
+
+        <item name="android:editTextColor">@color/white</item>
     </style>
 </resources>

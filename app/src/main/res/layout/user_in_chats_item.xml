@@ -6,14 +6,26 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp">
 
-    <ImageView
-        android:id="@+id/imageViewInChatsUserPicture"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardUserChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        app:cardCornerRadius="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_account_circle" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageViewInChatsUserPicture"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_account_circle" />
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/textViewInChatsUserName"
@@ -26,8 +38,8 @@
         app:layout_constraintBottom_toTopOf="@+id/textViewInChatsTextPreview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageViewInChatsUserPicture"
-        app:layout_constraintTop_toTopOf="@+id/imageViewInChatsUserPicture"
+        app:layout_constraintStart_toEndOf="@+id/cardUserChat"
+        app:layout_constraintTop_toTopOf="@+id/cardUserChat"
         tools:text="John Doe" />
 
     <TextView
@@ -37,7 +49,7 @@
         android:layout_marginEnd="8dp"
         android:maxLines="2"
         android:theme="@style/SubText"
-        app:layout_constraintBottom_toBottomOf="@+id/imageViewInChatsUserPicture"
+        app:layout_constraintBottom_toBottomOf="@+id/cardUserChat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/textViewInChatsUserName"
