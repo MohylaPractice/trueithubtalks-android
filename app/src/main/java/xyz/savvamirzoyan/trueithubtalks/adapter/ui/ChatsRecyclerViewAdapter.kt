@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import xyz.savvamirzoyan.trueithubtalks.R
 import xyz.savvamirzoyan.trueithubtalks.interfaces.RecyclerViewItemClickListener
-import xyz.savvamirzoyan.trueithubtalks.repository.model.jsonconvertable.Chat
+import xyz.savvamirzoyan.trueithubtalks.repository.websockets.jsonserializable.Chat
 
 class ChatsRecyclerViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
     val name: TextView = view.findViewById(R.id.textViewInChatsUserName)
@@ -42,7 +42,7 @@ class ChatsRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ChatsRecyclerViewHolder, position: Int) {
         val chat = chats[position]
 
-        holder.name.text = chat.username
+        holder.name.text = chat.title
         holder.textPreview.text = chat.textPreview
 
         Picasso.with(holder.picture.context)

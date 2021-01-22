@@ -1,6 +1,10 @@
-package xyz.savvamirzoyan.trueithubtalks.repository.model.jsonconvertable
+package xyz.savvamirzoyan.trueithubtalks.factory
 
-import xyz.savvamirzoyan.trueithubtalks.repository.model.jsonconvertable.outcome.TextMessageOutcome
+import xyz.savvamirzoyan.trueithubtalks.repository.websockets.jsonserializable.ConnectionChatsFeed
+import xyz.savvamirzoyan.trueithubtalks.repository.websockets.jsonserializable.Disconnect
+import xyz.savvamirzoyan.trueithubtalks.repository.websockets.jsonserializable.OpenChat
+import xyz.savvamirzoyan.trueithubtalks.repository.websockets.jsonserializable.Wrapper
+import xyz.savvamirzoyan.trueithubtalks.repository.websockets.response.TextMessageOutcome
 
 object MessageFactory {
 

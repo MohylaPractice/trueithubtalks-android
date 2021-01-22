@@ -1,4 +1,4 @@
-package xyz.savvamirzoyan.trueithubtalks.repository.websocket
+package xyz.savvamirzoyan.trueithubtalks.repository.controller
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
@@ -8,11 +8,11 @@ import kotlinx.serialization.json.Json
 import okhttp3.*
 import org.json.JSONObject
 import timber.log.Timber
+import xyz.savvamirzoyan.trueithubtalks.factory.MessageFactory
 import xyz.savvamirzoyan.trueithubtalks.repository.model.ChatMessage
-import xyz.savvamirzoyan.trueithubtalks.repository.model.jsonconvertable.Chat
-import xyz.savvamirzoyan.trueithubtalks.repository.model.jsonconvertable.MessageFactory
-import xyz.savvamirzoyan.trueithubtalks.repository.model.jsonconvertable.Wrapper
-import xyz.savvamirzoyan.trueithubtalks.repository.model.jsonconvertable.income.TextMessageIncome
+import xyz.savvamirzoyan.trueithubtalks.repository.websockets.jsonserializable.Chat
+import xyz.savvamirzoyan.trueithubtalks.repository.websockets.jsonserializable.Wrapper
+import xyz.savvamirzoyan.trueithubtalks.repository.websockets.request.TextMessageIncome
 import java.net.SocketException
 import java.security.SecureRandom
 import java.security.cert.CertificateException
@@ -97,9 +97,11 @@ class WebSocketController {
                 } else if (type == "chat-feed-update") {
                     val chatFeedUpdate = Json.decodeFromString<Wrapper<Chat>>(text).data
 
+                    Timber.i("CHATS: $chatFeedUpdate")
+
                     val newChatsFeed = arrayListOf<Chat>()
                     chats.value?.filter {
-                        it.username != chatFeedUpdate.username
+                        it.title != chatFeedUpdate.title
                     }?.map { it }?.let { newChatsFeed.addAll(it) }
                     newChatsFeed.add(0, chatFeedUpdate)
 

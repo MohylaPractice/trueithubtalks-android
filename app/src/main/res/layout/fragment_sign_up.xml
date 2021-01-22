@@ -19,12 +19,14 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="32dp"
+                android:autofillHints=""
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:theme="@style/AccentEditText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                app:layout_constraintTop_toBottomOf="@+id/textView4"
+                tools:ignore="LabelFor" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -62,36 +64,51 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:autofillHints=""
                 android:ems="10"
                 android:inputType="textPassword"
                 android:theme="@style/AccentEditText"
                 app:layout_constraintEnd_toEndOf="@+id/editTextPassword"
                 app:layout_constraintStart_toStartOf="@+id/textView8"
-                app:layout_constraintTop_toBottomOf="@+id/textView8" />
+                app:layout_constraintTop_toBottomOf="@+id/textView8"
+                tools:ignore="LabelFor" />
 
             <EditText
                 android:id="@+id/editTextPassword"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:autofillHints=""
                 android:ems="10"
                 android:inputType="textPassword"
                 android:theme="@style/AccentEditText"
                 app:layout_constraintEnd_toEndOf="@+id/editTextName"
                 app:layout_constraintStart_toStartOf="@+id/textView7"
-                app:layout_constraintTop_toBottomOf="@+id/textView7" />
+                app:layout_constraintTop_toBottomOf="@+id/textView7"
+                tools:ignore="LabelFor" />
 
             <Button
                 android:id="@+id/buttonSignUp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
                 android:layout_marginBottom="32dp"
                 android:text="@string/sign_up"
                 android:theme="@style/AccentButtonEnabled"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/editTextPasswordCopy"
-                app:layout_constraintStart_toStartOf="@+id/editTextPasswordCopy"
+                app:layout_constraintStart_toStartOf="@+id/editTextPasswordCopy" />
+
+            <TextView
+                android:id="@+id/textViewErrorSignUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@string/error_invalid_name_or_password"
+                android:theme="@style/ErrorText"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@+id/buttonSignUp"
+                app:layout_constraintEnd_toEndOf="@+id/buttonSignUp"
+                app:layout_constraintStart_toStartOf="@+id/buttonSignUp"
                 app:layout_constraintTop_toBottomOf="@+id/editTextPasswordCopy"
                 app:layout_constraintVertical_bias="1.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -54,9 +54,9 @@ object RetrofitClient {
             .addConverterFactory(GsonConverterFactory.create())
     }
 
-    val apiInterface: ApiInterface by lazy {
+    val apiInterface: IAPIEndpoints by lazy {
         retrofitClient
             .build()
-            .create(ApiInterface::class.java)
+            .create(IAPIEndpoints::class.java)
     }
 }

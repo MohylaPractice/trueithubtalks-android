@@ -38,7 +38,7 @@ class UserFoundRecyclerViewAdapter(
     override fun onBindViewHolder(holder: UserFoundViewHolder, position: Int) {
         val user = users[position]
 
-        holder.name.text = user.name
+        holder.name.text = user.username
 
         Picasso.with(holder.picture.context)
             .load(user.pictureUrl)

@@ -1,13 +1,15 @@
 package xyz.savvamirzoyan.trueithubtalks.ui.signup
 
+import android.app.Activity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import timber.log.Timber
-import xyz.savvamirzoyan.trueithubtalks.repository.RepositoryController
+import xyz.savvamirzoyan.trueithubtalks.interfaces.IViewModelCallback
+import xyz.savvamirzoyan.trueithubtalks.repository.controller.RepositoryController
 
-class SignUpViewModel : ViewModel() {
+class SignUpViewModel(activity: Activity) : ViewModel(), IViewModelCallback.ISignUp {
 
-    var token = MutableLiveData<String>()
+    var tokenLiveData = MutableLiveData<String>()
 
     var userName = ""
         private set
@@ -29,13 +31,24 @@ class SignUpViewModel : ViewModel() {
     val isSignUpButtonEnabled: Boolean
         get() = (nameFilled and passwordFilled and passwordMatch)
 
+    val repository = RepositoryController.SignUp(this, activity)
+
     init {
         Timber.i("initialized")
     }
 
-    fun updateNameFilled(name: String) {
-        Timber.i("updateNameFilled() called | name: $name")
-        userName = name
+    override fun onCredentialsSuccessResponse(token: String) {
+        tokenLiveData.postValue(token)
+        repository.setToken(token)
+    }
+
+    override fun onCredentialsFailureResponse() {
+        repository.setToken("")
+    }
+
+    fun updateNameFilled(username: String) {
+        Timber.i("updateNameFilled() called | name: $username")
+        userName = username
     }
 
     fun updatePasswordFilled(password: String) {
@@ -48,13 +61,8 @@ class SignUpViewModel : ViewModel() {
         userPasswordCopy = passwordCopy
     }
 
-    fun createUser(name: String, password: String) {
-        Timber.i("createUser($name, $password) called")
-        RepositoryController.createUser(name, password, token)
-    }
-
-    fun saveToken(tokenValue: String) {
-        Timber.i("saveToken($tokenValue) called")
-        RepositoryController.putToken(tokenValue)
+    fun sendSignUpCredentials(username: String, password: String) {
+        Timber.i("createUser($username, $password) called")
+        repository.sendSignUpCredentials(username, password)
     }
 }

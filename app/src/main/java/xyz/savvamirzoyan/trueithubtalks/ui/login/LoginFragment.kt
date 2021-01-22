@@ -1,6 +1,5 @@
 package xyz.savvamirzoyan.trueithubtalks.ui.login
 
-import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,9 +11,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.databinding.FragmentLoginBinding
+import xyz.savvamirzoyan.trueithubtalks.factory.LoginViewModelFactory
 import xyz.savvamirzoyan.trueithubtalks.interfaces.IAuthenticateActivity
+import xyz.savvamirzoyan.trueithubtalks.ui.AuthenticateActivity
 import xyz.savvamirzoyan.trueithubtalks.ui.toInt
-
 
 class LoginFragment : Fragment() {
 
@@ -33,7 +33,7 @@ class LoginFragment : Fragment() {
         // ViewModel
         viewModel = ViewModelProvider(
             this,
-            LoginViewModelFactory(requireActivity())
+            LoginViewModelFactory(context as AuthenticateActivity)
         ).get(LoginViewModel::class.java)
 
         binding.editTextName.text.insert(0, viewModel.userName)
@@ -48,67 +48,9 @@ class LoginFragment : Fragment() {
         setOnChangedPasswordListener()
         setTokenObserver()
 
+        viewModel.retrieveTokenFromSharedPreferences()
+
         return binding.root
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        Timber.i("onCreate() called")
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        Timber.i("onStart() called")
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        Timber.i("onResume() called")
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        Timber.i("onPause() called")
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        Timber.i("onStop() called")
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        Timber.i("onDestroyView() called")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        Timber.i("onDestroy() called")
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-
-        Timber.i("onDetach() called")
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        Timber.i("onAttach() called")
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        Timber.i("onViewCreated() called")
     }
 
     private fun setSignUpClickListener() {
@@ -152,7 +94,6 @@ class LoginFragment : Fragment() {
 
     private fun setLoginClickListener() {
         binding.buttonLogin.setOnClickListener {
-
             viewModel.sendCredentials(
                 binding.editTextName.text.toString(),
                 binding.editTextPassword.text.toString()
@@ -161,15 +102,15 @@ class LoginFragment : Fragment() {
     }
 
     private fun setTokenObserver() {
-        viewModel.token.observe(viewLifecycleOwner, {
+        viewModel.tokenLiveData.observe(viewLifecycleOwner) {
+            Timber.i("token: '$it'")
             // invalid credentials
             if (it == "") {
                 binding.textViewInvalidCredentials.visibility = View.VISIBLE
             } else {
                 binding.textViewInvalidCredentials.visibility = View.INVISIBLE
-                viewModel.saveToken(it)
                 (activity as IAuthenticateActivity).moveToMainActivity()
             }
-        })
+        }
     }
 }

@@ -64,7 +64,7 @@ class ChatsFragment : Fragment(), RecyclerViewItemClickListener {
 
     override fun onItemClick(position: Int) {
         val chat = chatsRecyclerViewAdapter.getUserByPosition(position)
-        val action = ChatsFragmentDirections.actionChatsFragmentToChatFragment(chat.username)
+        val action = ChatsFragmentDirections.actionChatsFragmentToChatFragment(chat.title)
         NavHostFragment.findNavController(this).navigate(action)
     }
 

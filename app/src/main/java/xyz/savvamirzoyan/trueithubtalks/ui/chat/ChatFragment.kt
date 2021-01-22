@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.savvamirzoyan.trueithubtalks.adapter.RecyclerViewChatAdapter
 import xyz.savvamirzoyan.trueithubtalks.databinding.FragmentChatBinding
+import xyz.savvamirzoyan.trueithubtalks.factory.ChatViewModelFactory
 import xyz.savvamirzoyan.trueithubtalks.repository.model.ChatMessage
 import xyz.savvamirzoyan.trueithubtalks.ui.MainActivity
 

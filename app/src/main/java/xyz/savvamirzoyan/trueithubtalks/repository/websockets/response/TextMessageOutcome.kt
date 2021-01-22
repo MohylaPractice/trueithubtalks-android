@@ -1,4 +1,4 @@
-package xyz.savvamirzoyan.trueithubtalks.repository.model.jsonconvertable.outcome
+package xyz.savvamirzoyan.trueithubtalks.repository.websockets.response
 
 import kotlinx.serialization.Serializable
 

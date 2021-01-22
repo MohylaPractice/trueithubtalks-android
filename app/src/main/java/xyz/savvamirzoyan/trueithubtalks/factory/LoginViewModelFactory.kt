@@ -1,11 +1,12 @@
-package xyz.savvamirzoyan.trueithubtalks.ui.login
+package xyz.savvamirzoyan.trueithubtalks.factory
 
-import androidx.fragment.app.FragmentActivity
+import android.app.Activity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import xyz.savvamirzoyan.trueithubtalks.ui.login.LoginViewModel
 
 
-class LoginViewModelFactory(private val activity: FragmentActivity) : ViewModelProvider.Factory {
+class LoginViewModelFactory(private val activity: Activity) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         @Suppress("UNCHECKED_CAST")
         return LoginViewModel(activity) as T

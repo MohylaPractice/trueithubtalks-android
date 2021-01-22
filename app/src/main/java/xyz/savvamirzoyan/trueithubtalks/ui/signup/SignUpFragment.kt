@@ -1,6 +1,5 @@
 package xyz.savvamirzoyan.trueithubtalks.ui.signup
 
-import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,7 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.databinding.FragmentSignUpBinding
+import xyz.savvamirzoyan.trueithubtalks.factory.SignUpViewModelFactory
 import xyz.savvamirzoyan.trueithubtalks.interfaces.IAuthenticateActivity
+import xyz.savvamirzoyan.trueithubtalks.ui.AuthenticateActivity
 import xyz.savvamirzoyan.trueithubtalks.ui.toInt
 
 
@@ -30,7 +31,10 @@ class SignUpFragment : Fragment() {
         binding = FragmentSignUpBinding.inflate(inflater, container, false)
 
         // ViewModel
-        viewModel = ViewModelProvider(this).get(SignUpViewModel::class.java)
+        viewModel = ViewModelProvider(
+            this,
+            SignUpViewModelFactory(context as AuthenticateActivity)
+        ).get(SignUpViewModel::class.java)
 
         // Setting listeners and values
         setOnChangedNameListener()
@@ -48,66 +52,6 @@ class SignUpFragment : Fragment() {
         setAlphaByBoolean(binding.buttonSignUp, viewModel.isSignUpButtonEnabled)
 
         return binding.root
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        Timber.i("onCreate() called")
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        Timber.i("onStart() called")
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        Timber.i("onResume() called")
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        Timber.i("onPause() called")
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        Timber.i("onStop() called")
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        Timber.i("onDestroyView() called")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        Timber.i("onDestroy() called")
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-
-        Timber.i("onDetach() called")
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        Timber.i("onAttach() called")
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        Timber.i("onViewCreated() called")
     }
 
     private fun setOnChangedNameListener() {
@@ -154,7 +98,7 @@ class SignUpFragment : Fragment() {
 
     private fun setSignUpClickListener() {
         binding.buttonSignUp.setOnClickListener {
-            viewModel.createUser(
+            viewModel.sendSignUpCredentials(
                 binding.editTextName.text.toString(),
                 binding.editTextPassword.text.toString()
             )
@@ -166,9 +110,13 @@ class SignUpFragment : Fragment() {
     }
 
     private fun setTokenObserver() {
-        viewModel.token.observe(viewLifecycleOwner, {
-            viewModel.saveToken(it)
-            (activity as IAuthenticateActivity).moveToMainActivity()
-        })
+        viewModel.tokenLiveData.observe(viewLifecycleOwner) {
+            if (it == "") {
+                binding.textViewErrorSignUp.visibility = View.VISIBLE
+            } else {
+                binding.textViewErrorSignUp.visibility = View.INVISIBLE
+                (activity as IAuthenticateActivity).moveToMainActivity()
+            }
+        }
     }
 }

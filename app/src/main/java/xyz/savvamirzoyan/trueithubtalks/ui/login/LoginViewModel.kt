@@ -1,22 +1,25 @@
 package xyz.savvamirzoyan.trueithubtalks.ui.login
 
-import androidx.fragment.app.FragmentActivity
+import android.app.Activity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import timber.log.Timber
-import xyz.savvamirzoyan.trueithubtalks.repository.RepositoryController
+import xyz.savvamirzoyan.trueithubtalks.interfaces.IViewModelCallback
+import xyz.savvamirzoyan.trueithubtalks.repository.controller.RepositoryController
 
-class LoginViewModel(activity: FragmentActivity) : ViewModel() {
+class LoginViewModel(activity: Activity) : ViewModel(),
+    IViewModelCallback.ILogin {
 
-    var token = MutableLiveData<String>()
+    val tokenLiveData = MutableLiveData<String>()
 
-    private var nameFilled = false
-    private var passwordFilled = false
     var userName = ""
     var userPassword = ""
-
+    private var nameFilled = false
+    private var passwordFilled = false
     val isLoginButtonEnabled: Boolean
-        get() = (nameFilled and passwordFilled)
+        get() = nameFilled and passwordFilled
+
+    private val repository: RepositoryController.Login
 
     init {
         Timber.i("initialized")
@@ -24,18 +27,29 @@ class LoginViewModel(activity: FragmentActivity) : ViewModel() {
         nameFilled = userName.isNotBlank() and userName.isNotEmpty()
         passwordFilled = userPassword.isNotBlank() and userPassword.isNotEmpty()
 
-        RepositoryController.setPreferencesController(activity)
-        RepositoryController.getToken(token)
+        repository = RepositoryController.Login(this, activity)
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        Timber.i("onCleared() called. LoginViewModel destroyed")
+    fun retrieveTokenFromSharedPreferences() {
+        repository.retrieveTokenFromSharedPreferences(tokenLiveData)
     }
 
-    fun updateNameFilled(name: String) {
-        Timber.i("updateNameFilled() called | name: $name")
-        userName = name
+    override fun onCredentialsSuccessResponse(token: String) {
+        tokenLiveData.postValue(token)
+        repository.setToken(token)
+    }
+
+    override fun onCredentialsFailureResponse(t: Throwable) {
+        tokenLiveData.postValue("")
+    }
+
+    override fun readTokenFromSharedPreferences(token: String) {
+//        tokenLiveData.postValue(token)
+    }
+
+    fun updateNameFilled(username: String) {
+        Timber.i("updateNameFilled() called | name: $username")
+        userName = username
         nameFilled = userName.isNotBlank() and userName.isNotEmpty()
     }
 
@@ -45,13 +59,8 @@ class LoginViewModel(activity: FragmentActivity) : ViewModel() {
         passwordFilled = userPassword.isNotBlank() and userPassword.isNotEmpty()
     }
 
-    fun sendCredentials(name: String, password: String) {
-        Timber.i("sendCredentials($name, $password) called")
-        RepositoryController.sendCredentials(name, password, token)
-    }
-
-    fun saveToken(tokenValue: String) {
-        Timber.i("saveToken($tokenValue) called")
-        RepositoryController.putToken(tokenValue)
+    fun sendCredentials(username: String, password: String) {
+        Timber.i("sendCredentials($username, $password) called")
+        repository.sendCredentials(username, password)
     }
 }
