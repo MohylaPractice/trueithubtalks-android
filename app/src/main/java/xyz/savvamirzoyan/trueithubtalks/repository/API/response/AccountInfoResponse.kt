@@ -1,7 +1,7 @@
 package xyz.savvamirzoyan.trueithubtalks.repository.API.response
 
-data class UserInfoResponse(
-    val token: String,
+data class AccountInfoResponse(
+    val id: Int,
     val username: String,
     val pictureUrl: String
 )

@@ -8,14 +8,24 @@ interface IRepositoryController {
         fun sendCredentials(username: String, password: String)
 
         fun retrieveTokenFromSharedPreferences(tokenLiveData: MutableLiveData<String>)
-        fun getToken()
+
+        fun setId(id: Int)
         fun setToken(token: String)
+        fun setUsername(username: String)
+        fun setPictureUrl(pictureUrl: String)
     }
 
     interface ISignUp {
         fun sendSignUpCredentials(username: String, password: String)
 
+        fun setId(id: Int)
         fun setToken(token: String)
+        fun setUsername(username: String)
+        fun setPictureUrl(pictureUrl: String)
+    }
+
+    interface IAccount {
+        fun getAccountInfo()
     }
 
     interface IChat

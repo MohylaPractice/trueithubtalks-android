@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.squareup.picasso.Picasso
 import xyz.savvamirzoyan.trueithubtalks.databinding.FragmentAccountBinding
+import xyz.savvamirzoyan.trueithubtalks.factory.AccountViewModelFactory
+import xyz.savvamirzoyan.trueithubtalks.ui.MainActivity
 
 class AccountFragment : Fragment() {
 
@@ -23,7 +25,10 @@ class AccountFragment : Fragment() {
         binding = FragmentAccountBinding.inflate(inflater, container, false)
 
         // ViewModel
-        viewModel = ViewModelProvider(this).get(AccountViewModel::class.java)
+        viewModel = ViewModelProvider(
+            this,
+            AccountViewModelFactory(context as MainActivity)
+        ).get(AccountViewModel::class.java)
 
         setOnChangedNameListener()
         setOnChangedPictureUrl()
@@ -32,15 +37,15 @@ class AccountFragment : Fragment() {
     }
 
     private fun setOnChangedPictureUrl() {
-        viewModel.pictureUrl.observe(viewLifecycleOwner) {
+        viewModel.pictureUrlLiveData.observe(viewLifecycleOwner) {
             Picasso.with(binding.imageViewUserPicture.context)
-                .load(viewModel.pictureUrl.value)
+                .load(viewModel.pictureUrlLiveData.value)
                 .into(binding.imageViewUserPicture)
         }
     }
 
     private fun setOnChangedNameListener() {
-        viewModel.name.observe(viewLifecycleOwner) {
+        viewModel.usernameLiveData.observe(viewLifecycleOwner) {
             binding.textViewUsername.text = it
         }
     }

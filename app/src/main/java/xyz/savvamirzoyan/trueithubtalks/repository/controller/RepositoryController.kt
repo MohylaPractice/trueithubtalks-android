@@ -19,12 +19,20 @@ class RepositoryController : IRepositoryController {
             preferences.getToken(tokenLiveData)
         }
 
-        override fun getToken() {
-            viewModelCallback.readTokenFromSharedPreferences(preferences.getTokenValue())
+        override fun setId(id: Int) {
+            preferences.setId(id)
         }
 
         override fun setToken(token: String) {
             preferences.setToken(token)
+        }
+
+        override fun setUsername(username: String) {
+            preferences.setUsername(username)
+        }
+
+        override fun setPictureUrl(pictureUrl: String) {
+            preferences.setPictureUrl(pictureUrl)
         }
     }
 
@@ -36,8 +44,36 @@ class RepositoryController : IRepositoryController {
             APIController.sendSignUpCredentials(viewModelCallback, username, password)
         }
 
+        override fun setId(id: Int) {
+            preferences.setId(id)
+        }
+
         override fun setToken(token: String) {
             preferences.setToken(token)
+        }
+
+        override fun setUsername(username: String) {
+            preferences.setUsername(username)
+        }
+
+        override fun setPictureUrl(pictureUrl: String) {
+            preferences.setPictureUrl(pictureUrl)
+        }
+    }
+
+    class Account(private val viewModelCallback: IViewModelCallback.IAccount, activity: Activity) :
+        IRepositoryController.IAccount {
+        private val preferences = SharedPreferencesController(activity)
+
+        override fun getAccountInfo() {
+
+            viewModelCallback.onUsernameInSharedPreferencesFound(preferences.getUsernameValue())
+
+            APIController.getAccountInfo(
+                viewModelCallback,
+                preferences.getTokenValue(),
+                preferences.getIdValue()
+            )
         }
     }
 

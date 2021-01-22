@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.interfaces.IViewModelCallback
+import xyz.savvamirzoyan.trueithubtalks.repository.API.response.LoginResponse
 import xyz.savvamirzoyan.trueithubtalks.repository.controller.RepositoryController
 
 class LoginViewModel(activity: Activity) : ViewModel(),
@@ -34,17 +35,16 @@ class LoginViewModel(activity: Activity) : ViewModel(),
         repository.retrieveTokenFromSharedPreferences(tokenLiveData)
     }
 
-    override fun onCredentialsSuccessResponse(token: String) {
-        tokenLiveData.postValue(token)
-        repository.setToken(token)
+    override fun onCredentialsSuccessResponse(response: LoginResponse) {
+        tokenLiveData.postValue(response.token)
+        repository.setId(response.id)
+        repository.setToken(response.token)
+        repository.setUsername(response.username)
+        repository.setPictureUrl(response.pictureUrl)
     }
 
     override fun onCredentialsFailureResponse(t: Throwable) {
         tokenLiveData.postValue("")
-    }
-
-    override fun readTokenFromSharedPreferences(token: String) {
-//        tokenLiveData.postValue(token)
     }
 
     fun updateNameFilled(username: String) {
