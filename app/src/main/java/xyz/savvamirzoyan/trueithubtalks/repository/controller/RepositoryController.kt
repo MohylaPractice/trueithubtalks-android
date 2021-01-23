@@ -85,7 +85,24 @@ class RepositoryController : IRepositoryController {
         }
     }
 
-    class Chat : IRepositoryController.IChat
+    class Chat(private val viewModelCallback: IViewModelCallback.IChat, activity: Activity) :
+        IRepositoryController.IChat {
+        private val preferences = SharedPreferencesController(activity)
+        private lateinit var websocket: WebSocketController.ChatController
+
+        override fun establishConnection(chatId: Int) {
+            websocket = WebSocketController.ChatController(
+                viewModelCallback,
+                preferences.getTokenValue(),
+                chatId
+            )
+            websocket.establishConnection()
+        }
+
+        override fun sendMessage(message: String) {
+            websocket.sendMessage(message)
+        }
+    }
 
 //    fun sendCredentials(name: String, password: String) {
 //        Timber.i("sendCredentials($name, $password) called")

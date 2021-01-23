@@ -3,6 +3,7 @@ package xyz.savvamirzoyan.trueithubtalks.interfaces
 import xyz.savvamirzoyan.trueithubtalks.repository.API.response.AccountInfoResponse
 import xyz.savvamirzoyan.trueithubtalks.repository.API.response.LoginResponse
 import xyz.savvamirzoyan.trueithubtalks.repository.API.response.UserSearchListResponse
+import xyz.savvamirzoyan.trueithubtalks.repository.websockets.request.TextMessageIncome
 
 interface IViewModelCallback {
     interface ILogin {
@@ -30,5 +31,8 @@ interface IViewModelCallback {
         fun onSearchUserFailureResponse(t: Throwable)
     }
 
-    interface IChat
+    interface IChat {
+        fun onMessageHistory(data: ArrayList<TextMessageIncome>)
+        fun onNewMessage(data: TextMessageIncome)
+    }
 }

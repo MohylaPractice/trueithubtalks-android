@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.savvamirzoyan.trueithubtalks.adapter.RecyclerViewChatAdapter
 import xyz.savvamirzoyan.trueithubtalks.databinding.FragmentChatBinding
 import xyz.savvamirzoyan.trueithubtalks.factory.ChatViewModelFactory
-import xyz.savvamirzoyan.trueithubtalks.repository.model.ChatMessage
 import xyz.savvamirzoyan.trueithubtalks.ui.MainActivity
 
 
@@ -34,7 +33,12 @@ class ChatFragment : Fragment() {
         val bundleArgs = ChatFragmentArgs.fromBundle(requireArguments())
         viewModel = ViewModelProvider(
             this,
-            ChatViewModelFactory(bundleArgs.username)
+            ChatViewModelFactory(
+                bundleArgs.chatId,
+                bundleArgs.title,
+                bundleArgs.pictureUrl,
+                context as MainActivity
+            )
         ).get(ChatViewModel::class.java)
 
         binding.recyclerViewChat.layoutManager = LinearLayoutManager(context)
@@ -45,7 +49,7 @@ class ChatFragment : Fragment() {
         setOnChangedMessageHistoryListener()
         setOnClickButtonSendListener()
 
-        (activity as MainActivity).setCustomActionBarTitle(bundleArgs.username)
+        (activity as MainActivity).setCustomActionBarTitle(bundleArgs.title)
 
         return binding.root
     }
@@ -74,9 +78,7 @@ class ChatFragment : Fragment() {
         binding.buttonSend.setOnClickListener {
             val text = binding.editTextMessage.text.toString()
             if (text.isNotEmpty() && text.isNotBlank()) {
-                viewModel.sendText(text)
-                recyclerViewChatAdapter.addMessage(ChatMessage(text, true))
-                binding.recyclerViewChat.smoothScrollToPosition(recyclerViewChatAdapter.itemCount - 1)
+                viewModel.sendMessage(text)
                 binding.editTextMessage.text.clear()
             }
         }
@@ -89,8 +91,4 @@ class ChatFragment : Fragment() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.disconnect()
-    }
 }

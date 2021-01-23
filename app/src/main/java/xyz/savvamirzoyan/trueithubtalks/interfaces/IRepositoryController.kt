@@ -32,5 +32,8 @@ interface IRepositoryController {
         fun searchUser(username: String)
     }
 
-    interface IChat
+    interface IChat {
+        fun establishConnection(chatId: Int)
+        fun sendMessage(message: String)
+    }
 }

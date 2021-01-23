@@ -42,7 +42,13 @@
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat">
         <argument
-            android:name="username"
+            android:name="chatId"
+            app:argType="integer" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="pictureUrl"
             app:argType="string" />
     </fragment>
 </navigation>

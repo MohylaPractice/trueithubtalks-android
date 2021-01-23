@@ -1,3 +1,3 @@
 package xyz.savvamirzoyan.trueithubtalks.repository.model
 
-data class ChatMessage(val text: String, val isMe: Boolean)
+data class ChatMessage(val message: String, val isMe: Boolean)

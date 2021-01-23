@@ -9,9 +9,10 @@ import okhttp3.*
 import org.json.JSONObject
 import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.factory.MessageFactory
-import xyz.savvamirzoyan.trueithubtalks.repository.model.ChatMessage
+import xyz.savvamirzoyan.trueithubtalks.interfaces.IViewModelCallback
 import xyz.savvamirzoyan.trueithubtalks.repository.websockets.jsonserializable.Chat
 import xyz.savvamirzoyan.trueithubtalks.repository.websockets.jsonserializable.Wrapper
+import xyz.savvamirzoyan.trueithubtalks.repository.websockets.request.ChatOpenRequest
 import xyz.savvamirzoyan.trueithubtalks.repository.websockets.request.TextMessageIncome
 import java.net.SocketException
 import java.security.SecureRandom
@@ -79,7 +80,7 @@ class WebSocketController {
             override fun onOpen(webSocket: WebSocket, response: Response) {
                 super.onOpen(webSocket, response)
 
-                val json = Json.encodeToString(MessageFactory.connectToChatsFeed(token))
+                val json = Json.encodeToString(MessageFactory.connectToChatsFeedAction(token))
 
                 serverSocket = webSocket
                 serverSocket!!.send(json)
@@ -131,7 +132,7 @@ class WebSocketController {
 
         fun connectToChats() {
             Timber.i("connectToChats() called")
-            socketClient.newWebSocket(buildInitRequest().build(), serverWebSocketListener)
+//            socketClient.newWebSocket(buildInitRequest().build(), serverWebSocketListener)
         }
 
         private fun buildInitRequest(): Request.Builder {
@@ -148,20 +149,21 @@ class WebSocketController {
 
     }
 
-    class SingleChatController(
+    class ChatController(
+        private val callback: IViewModelCallback.IChat,
         private val token: String,
-        private val username: String,
-        private val lastMessage: MutableLiveData<ChatMessage>,
-        private val messageHistory: MutableLiveData<ArrayList<ChatMessage>>
+        private var chatId: Int
     ) {
+        private val URL = "wss://192.168.0.105:8083/chat"
+
         private val socketClient = getUnsafeClient()
         private var serverSocket: WebSocket? = null
 
-        private val serverWebSocketListener = object : WebSocketListener() {
+        private val listener = object : WebSocketListener() {
             override fun onOpen(webSocket: WebSocket, response: Response) {
-                Timber.i("onOpen() called | response: $response")
+                Timber.i("onOpen() called")
 
-                val json = Json.encodeToString(MessageFactory.openChatAction(username, token))
+                val json = Json.encodeToString(MessageFactory.openChat(token, chatId))
 
                 serverSocket = webSocket
                 serverSocket!!.send(json)
@@ -170,71 +172,128 @@ class WebSocketController {
             override fun onMessage(webSocket: WebSocket, text: String) {
                 Timber.i("onMessage() called | text: $text")
 
-                val type = JSONObject(text).get("type")
-                if (type == "new-message") {
-                    val textMessage = Json.decodeFromString<Wrapper<TextMessageIncome>>(text).data
-                    lastMessage.postValue(ChatMessage(textMessage.message, false))
-                } else if (type == "message-history") {
-                    val messagesRaw =
-                        Json.decodeFromString<Wrapper<ArrayList<TextMessageIncome>>>(text).data
+                when (JSONObject(text).get("type")) {
+                    "new-message" -> {
+                        val data = Json.decodeFromString<Wrapper<TextMessageIncome>>(text).data
+                        callback.onNewMessage(data)
+                    }
 
-                    val messagesPrepared = arrayListOf<ChatMessage>()
-                    messagesPrepared.addAll(messagesRaw.map {
-                        ChatMessage(
-                            it.message,
-                            it.username == username
-                        )
-                    })
-                    messageHistory.postValue(messagesPrepared)
+                    "message-history" -> {
+                        val data = Json.decodeFromString<Wrapper<ChatOpenRequest>>(text).data
+                        chatId = data.chatId
+                        callback.onMessageHistory(data.messages)
+                    }
                 }
             }
 
-            override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
-                Timber.i("onClosing() called | code: $code | reason: $reason")
-
-                webSocket.close(1000, null)
-                webSocket.cancel()
-            }
-
-            override fun onFailure(
-                webSocket: WebSocket,
-                t: Throwable,
-                response: Response?
-            ) {
-                Timber.i("onFailure() called | t: $t ${t.localizedMessage} | response: $response")
-                if (t is SocketException) {
-                    serverSocket = null
-                    webSocket.close(1000, null)
-                    webSocket.cancel()
-                } else if (t is java.io.EOFException) {
-                    connectToChat()
-                }
+            override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+                Timber.i("onFailure() called")
+                Timber.i("t: $t | response: $response")
             }
         }
 
-        private fun buildInitRequest(): Request.Builder {
-            Timber.i("buildInitRequest() called")
-            return Request.Builder().url("wss://192.168.0.105:8083/chat")
+        fun establishConnection() {
+            Timber.i("establishConnection() called")
+            socketClient.newWebSocket(requestBuilder().build(), listener)
         }
 
-        fun connectToChat() {
-            Timber.i("connect() called")
-            socketClient.newWebSocket(buildInitRequest().build(), serverWebSocketListener)
-        }
-
-        fun disconnect() {
-            Timber.i("disconnect() called")
-
-            val json = Json.encodeToString(MessageFactory.disconnectAction(username, token))
-
+        fun sendMessage(message: String) {
+            Timber.i("sendMessage(message: $message) called")
+            val json = Json.encodeToString(MessageFactory.message(token, chatId, message))
             serverSocket?.send(json)
         }
 
-        fun sendText(text: String) {
-            Timber.i("sendText($text) called")
-
-            val json = Json.encodeToString(MessageFactory.textMessage(username, token, text))
-            serverSocket?.send(json)
+        private fun requestBuilder(): Request.Builder {
+            return Request.Builder().url(URL)
         }
     }
+
+//    class ChatController(
+//        private val token: String,
+//        private val chatId: Int,
+//        private val callback: IViewModelCallback.IChat
+//    ) {
+//        private val socketClient = getUnsafeClient()
+//        private var serverSocket: WebSocket? = null
+//
+//        private val serverWebSocketListener = object : WebSocketListener() {
+//            override fun onOpen(webSocket: WebSocket, response: Response) {
+//                Timber.i("onOpen() called | response: $response")
+//
+//                val json = Json.encodeToString(MessageFactory.openChatAction(username, token))
+//
+//                serverSocket = webSocket
+//                serverSocket!!.send(json)
+//            }
+//
+//            override fun onMessage(webSocket: WebSocket, text: String) {
+//                Timber.i("onMessage() called | text: $text")
+//
+//                val type = JSONObject(text).get("type")
+//                if (type == "new-message") {
+//                    val textMessage = Json.decodeFromString<Wrapper<TextMessageIncome>>(text).data
+//                    lastMessage.postValue(ChatMessage(textMessage.message, false))
+//                } else if (type == "message-history") {
+//                    val messagesRaw =
+//                        Json.decodeFromString<Wrapper<ArrayList<TextMessageIncome>>>(text).data
+//
+//                    val messagesPrepared = arrayListOf<ChatMessage>()
+//                    messagesPrepared.addAll(messagesRaw.map {
+//                        ChatMessage(
+//                            it.message,
+//                            it.username == username
+//                        )
+//                    })
+//                    messageHistory.postValue(messagesPrepared)
+//                }
+//            }
+//
+//            override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
+//                Timber.i("onClosing() called | code: $code | reason: $reason")
+//
+//                webSocket.close(1000, null)
+//                webSocket.cancel()
+//            }
+//
+//            override fun onFailure(
+//                webSocket: WebSocket,
+//                t: Throwable,
+//                response: Response?
+//            ) {
+//                Timber.i("onFailure() called | t: $t ${t.localizedMessage} | response: $response")
+//                if (t is SocketException) {
+//                    serverSocket = null
+//                    webSocket.close(1000, null)
+//                    webSocket.cancel()
+//                } else if (t is java.io.EOFException) {
+//                    connectToChat()
+//                }
+//            }
+//        }
+//
+//        private fun buildInitRequest(): Request.Builder {
+//            Timber.i("buildInitRequest() called")
+//            return Request.Builder().url("wss://192.168.0.105:8083/chat")
+//        }
+//
+//        fun connectToChat() {
+//            Timber.i("connect() called")
+//            socketClient.newWebSocket(buildInitRequest().build(), serverWebSocketListener)
+//        }
+//
+//        fun disconnect() {
+//            Timber.i("disconnect() called")
+//
+//            val json = Json.encodeToString(MessageFactory.disconnectAction(username, token))
+//
+//            serverSocket?.send(json)
+//        }
+//
+//        fun sendText(text: String) {
+//            Timber.i("sendText($text) called")
+//
+//            val json = Json.encodeToString(MessageFactory.textMessage(username, token, text))
+//            serverSocket?.send(json)
+//        }
+//    }
 }

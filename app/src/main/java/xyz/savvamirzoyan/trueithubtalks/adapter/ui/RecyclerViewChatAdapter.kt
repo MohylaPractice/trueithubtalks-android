@@ -44,9 +44,9 @@ class RecyclerViewChatAdapter(private val messages: ArrayList<ChatMessage>) :
         val viewType = getItemViewType(position)
 
         if (viewType == TYPE_MESSAGE_ME) {
-            (holder as ChatMessageMeViewHolder).textView.text = message.text
+            (holder as ChatMessageMeViewHolder).textView.text = message.message
         } else if (viewType == TYPE_MESSAGE_OTHER) {
-            (holder as ChatMessageOtherViewHolder).textView.text = message.text
+            (holder as ChatMessageOtherViewHolder).textView.text = message.message
         }
     }
 
