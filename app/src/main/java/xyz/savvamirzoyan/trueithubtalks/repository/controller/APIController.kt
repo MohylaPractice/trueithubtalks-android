@@ -8,8 +8,10 @@ import xyz.savvamirzoyan.trueithubtalks.interfaces.IViewModelCallback
 import xyz.savvamirzoyan.trueithubtalks.repository.API.RetrofitClient
 import xyz.savvamirzoyan.trueithubtalks.repository.API.request.AccountInfoRequest
 import xyz.savvamirzoyan.trueithubtalks.repository.API.request.LoginCredentialsRequest
+import xyz.savvamirzoyan.trueithubtalks.repository.API.request.UserSearchRequest
 import xyz.savvamirzoyan.trueithubtalks.repository.API.response.AccountInfoResponse
 import xyz.savvamirzoyan.trueithubtalks.repository.API.response.LoginResponse
+import xyz.savvamirzoyan.trueithubtalks.repository.API.response.UserSearchListResponse
 
 object APIController {
 
@@ -84,6 +86,31 @@ object APIController {
             override fun onFailure(call: Call<AccountInfoResponse>, t: Throwable) {
                 Timber.i("onFailure() called")
                 callback.onAccountInfoFailureResponse(t)
+            }
+        })
+    }
+
+    fun searchUser(
+        callback: IViewModelCallback.ISearch,
+        token: String,
+        username: String
+    ) {
+        Timber.i("searchUser() called")
+
+        val call =
+            RetrofitClient.apiInterface.searchUserByUsername(UserSearchRequest(token, username))
+        call.enqueue(object : Callback<UserSearchListResponse> {
+            override fun onResponse(
+                call: Call<UserSearchListResponse>,
+                response: Response<UserSearchListResponse>
+            ) {
+                Timber.i("onResponse() called")
+                callback.onSearchUserSuccessResponse(response.body()!!)
+            }
+
+            override fun onFailure(call: Call<UserSearchListResponse>, t: Throwable) {
+                Timber.i("onFailure() called")
+                callback.onSearchUserFailureResponse(t)
             }
         })
     }

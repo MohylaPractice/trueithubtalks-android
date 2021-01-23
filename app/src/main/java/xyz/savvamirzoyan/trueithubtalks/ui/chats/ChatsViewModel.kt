@@ -18,7 +18,7 @@ class ChatsViewModel : ViewModel() {
         Timber.i("initialized")
 
         // Initiate connection
-        webSocketController.connectToChats()
+//        webSocketController.connectToChats()
     }
 
     fun disconnect() = webSocketController.disconnect()

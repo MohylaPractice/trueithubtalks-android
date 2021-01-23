@@ -28,5 +28,9 @@ interface IRepositoryController {
         fun getAccountInfo()
     }
 
+    interface ISearch {
+        fun searchUser(username: String)
+    }
+
     interface IChat
 }

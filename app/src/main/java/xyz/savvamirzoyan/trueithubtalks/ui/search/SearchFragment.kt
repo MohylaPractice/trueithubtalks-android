@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.adapter.UserFoundRecyclerViewAdapter
 import xyz.savvamirzoyan.trueithubtalks.databinding.FragmentSearchBinding
+import xyz.savvamirzoyan.trueithubtalks.factory.SearchViewModelFactory
 import xyz.savvamirzoyan.trueithubtalks.interfaces.RecyclerViewItemClickListener
+import xyz.savvamirzoyan.trueithubtalks.ui.MainActivity
 
 class SearchFragment : Fragment(), RecyclerViewItemClickListener {
 
@@ -31,7 +33,10 @@ class SearchFragment : Fragment(), RecyclerViewItemClickListener {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
 
         // ViewModel
-        viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
+        viewModel = ViewModelProvider(
+            this,
+            SearchViewModelFactory(context as MainActivity)
+        ).get(SearchViewModel::class.java)
 
         setOnChangedTextSearchView()
         setOnFoundUserListener()
@@ -45,7 +50,7 @@ class SearchFragment : Fragment(), RecyclerViewItemClickListener {
     private fun setOnChangedTextSearchView() {
         binding.editTextSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                viewModel.makeSearch(s.toString())
+                viewModel.searchUser(s.toString())
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}

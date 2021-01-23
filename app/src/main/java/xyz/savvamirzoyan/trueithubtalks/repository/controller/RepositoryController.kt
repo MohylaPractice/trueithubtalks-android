@@ -66,7 +66,6 @@ class RepositoryController : IRepositoryController {
         private val preferences = SharedPreferencesController(activity)
 
         override fun getAccountInfo() {
-
             viewModelCallback.onUsernameInSharedPreferencesFound(preferences.getUsernameValue())
 
             APIController.getAccountInfo(
@@ -74,6 +73,15 @@ class RepositoryController : IRepositoryController {
                 preferences.getTokenValue(),
                 preferences.getIdValue()
             )
+        }
+    }
+
+    class Search(private val viewModelCallback: IViewModelCallback.ISearch, activity: Activity) :
+        IRepositoryController.ISearch {
+        private val preferences = SharedPreferencesController(activity)
+
+        override fun searchUser(username: String) {
+            APIController.searchUser(viewModelCallback, preferences.getTokenValue(), username)
         }
     }
 

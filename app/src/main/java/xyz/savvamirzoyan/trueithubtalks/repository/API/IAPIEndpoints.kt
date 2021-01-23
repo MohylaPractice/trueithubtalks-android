@@ -9,7 +9,7 @@ import xyz.savvamirzoyan.trueithubtalks.repository.API.request.LoginCredentialsR
 import xyz.savvamirzoyan.trueithubtalks.repository.API.request.UserSearchRequest
 import xyz.savvamirzoyan.trueithubtalks.repository.API.response.AccountInfoResponse
 import xyz.savvamirzoyan.trueithubtalks.repository.API.response.LoginResponse
-import xyz.savvamirzoyan.trueithubtalks.repository.API.response.UserFoundResponse
+import xyz.savvamirzoyan.trueithubtalks.repository.API.response.UserSearchListResponse
 
 interface IAPIEndpoints {
 
@@ -26,7 +26,7 @@ interface IAPIEndpoints {
     fun getAccountInfo(@Body body: AccountInfoRequest): Call<AccountInfoResponse>
 
     @Headers("Content-Type: application/json")
-    @POST("user-search-username")
-    fun searchUserByUsername(@Body body: UserSearchRequest): Call<UserFoundResponse>
+    @POST("user-search")
+    fun searchUserByUsername(@Body body: UserSearchRequest): Call<UserSearchListResponse>
 
 }
