@@ -5,11 +5,13 @@ import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import xyz.savvamirzoyan.trueithubtalks.repository.API.request.AccountInfoRequest
+import xyz.savvamirzoyan.trueithubtalks.repository.API.request.ChatFromSearchRequest
 import xyz.savvamirzoyan.trueithubtalks.repository.API.request.LoginCredentialsRequest
 import xyz.savvamirzoyan.trueithubtalks.repository.API.request.UserSearchRequest
 import xyz.savvamirzoyan.trueithubtalks.repository.API.response.AccountInfoResponse
+import xyz.savvamirzoyan.trueithubtalks.repository.API.response.ChatFromSearchResponse
+import xyz.savvamirzoyan.trueithubtalks.repository.API.response.ChatsSearchResponse
 import xyz.savvamirzoyan.trueithubtalks.repository.API.response.LoginResponse
-import xyz.savvamirzoyan.trueithubtalks.repository.API.response.UserSearchListResponse
 
 interface IAPIEndpoints {
 
@@ -27,6 +29,9 @@ interface IAPIEndpoints {
 
     @Headers("Content-Type: application/json")
     @POST("user-search")
-    fun searchUserByUsername(@Body body: UserSearchRequest): Call<UserSearchListResponse>
+    fun searchUserByUsername(@Body body: UserSearchRequest): Call<ChatsSearchResponse>
 
+    @Headers("Content-Type: application/json")
+    @POST("get-chat-from-search")
+    fun getPrivateChat(@Body body: ChatFromSearchRequest): Call<ChatFromSearchResponse>
 }

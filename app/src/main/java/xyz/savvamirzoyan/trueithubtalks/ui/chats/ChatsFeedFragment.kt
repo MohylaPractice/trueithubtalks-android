@@ -12,12 +12,14 @@ import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.R
 import xyz.savvamirzoyan.trueithubtalks.adapter.ui.ChatsRecyclerViewAdapter
 import xyz.savvamirzoyan.trueithubtalks.databinding.FragmentChatsBinding
+import xyz.savvamirzoyan.trueithubtalks.factory.ChatsFeedViewModelFactory
 import xyz.savvamirzoyan.trueithubtalks.interfaces.RecyclerViewItemClickListener
+import xyz.savvamirzoyan.trueithubtalks.ui.MainActivity
 
-class ChatsFragment : Fragment(), RecyclerViewItemClickListener {
+class ChatsFeedFragment : Fragment(), RecyclerViewItemClickListener {
 
     private lateinit var binding: FragmentChatsBinding
-    private lateinit var viewModel: ChatsViewModel
+    private lateinit var viewModel: ChatsFeedViewModel
     private val chatsRecyclerViewAdapter = ChatsRecyclerViewAdapter(this, arrayListOf())
 
     override fun onCreateView(
@@ -31,7 +33,10 @@ class ChatsFragment : Fragment(), RecyclerViewItemClickListener {
         binding = FragmentChatsBinding.inflate(inflater, container, false)
 
         // ViewModel
-        viewModel = ViewModelProvider(this).get(ChatsViewModel::class.java)
+        viewModel = ViewModelProvider(
+            this,
+            ChatsFeedViewModelFactory(context as MainActivity)
+        ).get(ChatsFeedViewModel::class.java)
 
 
         binding.recyclerViewChats.layoutManager = LinearLayoutManager(context)
@@ -43,7 +48,7 @@ class ChatsFragment : Fragment(), RecyclerViewItemClickListener {
     }
 
     private fun setOnChangedChatsListener() {
-        viewModel.chats.observe(viewLifecycleOwner) {
+        viewModel.chatsLiveData.observe(viewLifecycleOwner) {
             chatsRecyclerViewAdapter.updateChats(it)
         }
     }
@@ -62,9 +67,9 @@ class ChatsFragment : Fragment(), RecyclerViewItemClickListener {
         ) || super.onOptionsItemSelected(item)
     }
 
-    override fun onItemClick(position: Int) {
+    override fun onChatClick(position: Int) {
         val chat = chatsRecyclerViewAdapter.getUserByPosition(position)
-        val action = ChatsFragmentDirections.actionChatsFragmentToChatFragment(
+        val action = ChatsFeedFragmentDirections.actionChatsFragmentToChatFragment(
             chat.id,
             chat.title,
             chat.pictureUrl

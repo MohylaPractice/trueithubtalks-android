@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import timber.log.Timber
-import xyz.savvamirzoyan.trueithubtalks.adapter.UserFoundRecyclerViewAdapter
+import xyz.savvamirzoyan.trueithubtalks.adapter.ChatsFoundRecyclerViewAdapter
 import xyz.savvamirzoyan.trueithubtalks.databinding.FragmentSearchBinding
 import xyz.savvamirzoyan.trueithubtalks.factory.SearchViewModelFactory
 import xyz.savvamirzoyan.trueithubtalks.interfaces.RecyclerViewItemClickListener
@@ -22,7 +22,7 @@ class SearchFragment : Fragment(), RecyclerViewItemClickListener {
     private lateinit var binding: FragmentSearchBinding
     private lateinit var viewModel: SearchViewModel
 
-    private val userFoundRecyclerViewAdapter = UserFoundRecyclerViewAdapter(this, arrayListOf())
+    private val userFoundRecyclerViewAdapter = ChatsFoundRecyclerViewAdapter(this, arrayListOf())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +39,7 @@ class SearchFragment : Fragment(), RecyclerViewItemClickListener {
         ).get(SearchViewModel::class.java)
 
         setOnChangedTextSearchView()
+        setOnChatToOpenListener()
         setOnFoundUserListener()
 
         binding.searchRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -60,18 +61,25 @@ class SearchFragment : Fragment(), RecyclerViewItemClickListener {
 
     private fun setOnFoundUserListener() {
         viewModel.foundUserList.observe(viewLifecycleOwner) {
-            Timber.i("found users: ${viewModel.foundUserList.value}")
-            viewModel.foundUserList.value?.let { it1 -> userFoundRecyclerViewAdapter.updateUsers(it1) }
+            Timber.i("foundUserList: ${viewModel.foundUserList.value}")
+            viewModel.foundUserList.value?.let { it1 -> userFoundRecyclerViewAdapter.updateChats(it1) }
         }
     }
 
-    override fun onItemClick(position: Int) {
-        val user = userFoundRecyclerViewAdapter.getUserByPosition(position)
-        val action = SearchFragmentDirections.actionSearchFragmentToChatFragment(
-            user.id,
-            user.username,
-            user.pictureUrl
-        )
-        NavHostFragment.findNavController(this).navigate(action)
+    private fun setOnChatToOpenListener() {
+        viewModel.chatToOpen.observe(viewLifecycleOwner) {
+            Timber.i("chatIdToOpen: ${viewModel.chatToOpen.value}")
+            val action = SearchFragmentDirections.actionSearchFragmentToChatFragment(
+                viewModel.chatToOpen.value!!.id,
+                viewModel.chatToOpen.value!!.title,
+                viewModel.chatToOpen.value!!.pictureUrl
+            )
+            NavHostFragment.findNavController(this).navigate(action)
+        }
+    }
+
+    override fun onChatClick(position: Int) {
+        val chat = userFoundRecyclerViewAdapter.getChatByPosition(position)
+        viewModel.openChat(chat.id)
     }
 }

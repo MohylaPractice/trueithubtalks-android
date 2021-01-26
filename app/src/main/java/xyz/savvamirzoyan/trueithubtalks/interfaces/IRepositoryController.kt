@@ -30,10 +30,20 @@ interface IRepositoryController {
 
     interface ISearch {
         fun searchUser(username: String)
+        fun getChat(userId: Int)
     }
 
     interface IChat {
         fun establishConnection(chatId: Int)
+        fun disconnect()
+
         fun sendMessage(message: String)
+
+        fun getId(): Int
+    }
+
+    interface IChatsFeed {
+        fun establishConnection()
+        fun disconnect()
     }
 }

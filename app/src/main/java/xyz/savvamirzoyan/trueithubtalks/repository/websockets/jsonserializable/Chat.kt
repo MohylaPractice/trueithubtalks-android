@@ -8,4 +8,4 @@ data class Chat(
     val title: String,
     val textPreview: String,
     val pictureUrl: String
-)//val username: String, val textPreview: String, val pictureUrl: String)
+)

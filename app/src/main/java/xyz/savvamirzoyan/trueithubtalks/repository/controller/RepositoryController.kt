@@ -2,6 +2,7 @@ package xyz.savvamirzoyan.trueithubtalks.repository.controller
 
 import android.app.Activity
 import androidx.lifecycle.MutableLiveData
+import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.interfaces.IRepositoryController
 import xyz.savvamirzoyan.trueithubtalks.interfaces.IViewModelCallback
 
@@ -12,26 +13,32 @@ class RepositoryController : IRepositoryController {
         private val preferences = SharedPreferencesController(activity)
 
         override fun sendCredentials(username: String, password: String) {
+            Timber.i("sendCredentials() called")
             APIController.sendCredentials(viewModelCallback, username, password)
         }
 
         override fun retrieveTokenFromSharedPreferences(tokenLiveData: MutableLiveData<String>) {
+            Timber.i("retrieveTokenFromSharedPreferences() called")
             preferences.getToken(tokenLiveData)
         }
 
         override fun setId(id: Int) {
+            Timber.i("setId() called")
             preferences.setId(id)
         }
 
         override fun setToken(token: String) {
+            Timber.i("setToken() called")
             preferences.setToken(token)
         }
 
         override fun setUsername(username: String) {
+            Timber.i("setUsername() called")
             preferences.setUsername(username)
         }
 
         override fun setPictureUrl(pictureUrl: String) {
+            Timber.i("setPictureUrl() called")
             preferences.setPictureUrl(pictureUrl)
         }
     }
@@ -41,22 +48,27 @@ class RepositoryController : IRepositoryController {
         private val preferences = SharedPreferencesController(activity)
 
         override fun sendSignUpCredentials(username: String, password: String) {
+            Timber.i("sendSignUpCredentials(username: $username, password: $password) called")
             APIController.sendSignUpCredentials(viewModelCallback, username, password)
         }
 
         override fun setId(id: Int) {
+            Timber.i("setId(id: $id) called")
             preferences.setId(id)
         }
 
         override fun setToken(token: String) {
+            Timber.i("setToken(token: $token) called")
             preferences.setToken(token)
         }
 
         override fun setUsername(username: String) {
+            Timber.i("setUsername(username: $username) called")
             preferences.setUsername(username)
         }
 
         override fun setPictureUrl(pictureUrl: String) {
+            Timber.i("setPictureUrl(pictureUrl: $pictureUrl) called")
             preferences.setPictureUrl(pictureUrl)
         }
     }
@@ -66,6 +78,7 @@ class RepositoryController : IRepositoryController {
         private val preferences = SharedPreferencesController(activity)
 
         override fun getAccountInfo() {
+            Timber.i("getAccountInfo() called")
             viewModelCallback.onUsernameInSharedPreferencesFound(preferences.getUsernameValue())
 
             APIController.getAccountInfo(
@@ -81,7 +94,18 @@ class RepositoryController : IRepositoryController {
         private val preferences = SharedPreferencesController(activity)
 
         override fun searchUser(username: String) {
+            Timber.i("searchUser() called")
             APIController.searchUser(viewModelCallback, preferences.getTokenValue(), username)
+        }
+
+        override fun getChat(id: Int) {
+            Timber.i("getChat(userId: $id) called")
+            APIController.getChat(
+                viewModelCallback,
+                preferences.getTokenValue(),
+                preferences.getIdValue(),
+                id
+            )
         }
     }
 
@@ -91,6 +115,7 @@ class RepositoryController : IRepositoryController {
         private lateinit var websocket: WebSocketController.ChatController
 
         override fun establishConnection(chatId: Int) {
+            Timber.i("establishConnection() called")
             websocket = WebSocketController.ChatController(
                 viewModelCallback,
                 preferences.getTokenValue(),
@@ -99,35 +124,40 @@ class RepositoryController : IRepositoryController {
             websocket.establishConnection()
         }
 
+        override fun disconnect() {
+            Timber.i("disconnect() called")
+            websocket.disconnect()
+        }
+
         override fun sendMessage(message: String) {
+            Timber.i("sendMessage(message: $message) called")
             websocket.sendMessage(message)
+        }
+
+        override fun getId(): Int {
+            return preferences.getIdValue()
         }
     }
 
-//    fun sendCredentials(name: String, password: String) {
-//        Timber.i("sendCredentials($name, $password) called")
-//        APIController.sendCredentials(fragmentApiCallback, name, password)
-//    }
-//
-//    fun createUser(name: String, password: String) {
-//        Timber.i("sendCredentials($name, $password) called")
-//        APIController.createUser(name, password)
-//    }
-//
-//    fun getTokenValue(): String = preferences.getTokenValue()
-//
-//
-//    fun putToken(tokenValue: String) {
-//        Timber.i("putToken() called")
-//        preferences.putToken(tokenValue)
-//    }
-//
-//    fun getUserInfo() {
-//
-//    }
-//
-//    fun searchUserByUsername(username: String) {
-//        Timber.i("searchUserByUsername() called")
-////        APIController.searchUserByUsername(preferencesController.getTokenValue(), username)
-//    }
+    class ChatsFeed(
+        private val viewModelCallback: IViewModelCallback.IChatsFeed,
+        activity: Activity
+    ) : IRepositoryController.IChatsFeed {
+        private val preferences = SharedPreferencesController(activity)
+        private lateinit var websocket: WebSocketController.ChatsFeedController
+
+        override fun establishConnection() {
+            Timber.i("establishConnection() called")
+            websocket = WebSocketController.ChatsFeedController(
+                viewModelCallback,
+                preferences.getTokenValue()
+            )
+            websocket.establishConnection()
+        }
+
+        override fun disconnect() {
+            Timber.i("disconnect() called")
+            websocket.disconnect()
+        }
+    }
 }

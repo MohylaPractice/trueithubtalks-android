@@ -7,11 +7,13 @@ import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.interfaces.IViewModelCallback
 import xyz.savvamirzoyan.trueithubtalks.repository.API.RetrofitClient
 import xyz.savvamirzoyan.trueithubtalks.repository.API.request.AccountInfoRequest
+import xyz.savvamirzoyan.trueithubtalks.repository.API.request.ChatFromSearchRequest
 import xyz.savvamirzoyan.trueithubtalks.repository.API.request.LoginCredentialsRequest
 import xyz.savvamirzoyan.trueithubtalks.repository.API.request.UserSearchRequest
 import xyz.savvamirzoyan.trueithubtalks.repository.API.response.AccountInfoResponse
+import xyz.savvamirzoyan.trueithubtalks.repository.API.response.ChatFromSearchResponse
+import xyz.savvamirzoyan.trueithubtalks.repository.API.response.ChatsSearchResponse
 import xyz.savvamirzoyan.trueithubtalks.repository.API.response.LoginResponse
-import xyz.savvamirzoyan.trueithubtalks.repository.API.response.UserSearchListResponse
 
 object APIController {
 
@@ -99,76 +101,45 @@ object APIController {
 
         val call =
             RetrofitClient.apiInterface.searchUserByUsername(UserSearchRequest(token, username))
-        call.enqueue(object : Callback<UserSearchListResponse> {
+        call.enqueue(object : Callback<ChatsSearchResponse> {
             override fun onResponse(
-                call: Call<UserSearchListResponse>,
-                response: Response<UserSearchListResponse>
+                call: Call<ChatsSearchResponse>,
+                response: Response<ChatsSearchResponse>
             ) {
-                Timber.i("onResponse() called")
+                Timber.i("onResponse() called | response: ${response.body()}")
                 callback.onSearchUserSuccessResponse(response.body()!!)
             }
 
-            override fun onFailure(call: Call<UserSearchListResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ChatsSearchResponse>, t: Throwable) {
                 Timber.i("onFailure() called")
                 callback.onSearchUserFailureResponse(t)
             }
         })
     }
 
-//    fun getUserInfoById(
-//        id: Int,
-//        name: MutableLiveData<String>,
-//        pictureUrl: MutableLiveData<String>
-//    ) {
-//        Timber.i("getUserInfoByToken() called")
-//
-//        val call = RetrofitClient.apiInterface.getUserInfoByToken(CredentialsTokenRequest(token))
-//        call.enqueue(object : Callback<UserInfoResponse> {
-//            override fun onResponse(
-//                call: Call<UserInfoResponse>,
-//                response: Response<UserInfoResponse>
-//            ) {
-//                Timber.i("getUserInfoByToken() -> onResponse() called")
-//
-//                if (response.body() != null) {
-//                    name.value = response.body()!!.username
-//                    pictureUrl.value = response.body()!!.pictureUrl
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<UserInfoResponse>, t: Throwable) {
-//                Timber.i("getUserInfoByToken() -> onFailure() called")
-//            }
-//        })
-//    }
-//
-//    fun searchUserByUsername(
-//        token: String,
-//        username: String,
-//        users: MutableLiveData<List<UserSearch>>
-//    ) {
-//        Timber.i("searchUserByUsername() called")
-//
-//        val call =
-//            RetrofitClient.apiInterface.searchUserByUsername(UserSearchRequest(token, username))
-//        call.enqueue(object : Callback<UserFoundResponse> {
-//            override fun onResponse(
-//                call: Call<UserFoundResponse>,
-//                response: Response<UserFoundResponse>
-//            ) {
-//                Timber.i("searchUserByUsername() -> onResponse() called")
-//
-//                Timber.i("response.body() == null -> ${response.body() == null}")
-//
-//                if (response.body() != null) {
-//                    Timber.i("users: ${response.body()!!.users}")
-//                    users.value = response.body()!!.users
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<UserFoundResponse>, t: Throwable) {
-//                Timber.i("searchUserByUsername() -> onFailure() called. t: $t")
-//            }
-//        })
-//    }
+    fun getChat(
+        callback: IViewModelCallback.ISearch,
+        token: String,
+        userId1: Int,
+        id: Int
+    ) {
+        Timber.i("getPrivateChat(token: $token, userId1: $userId1, userId2: $id) called")
+
+        val call =
+            RetrofitClient.apiInterface.getPrivateChat(ChatFromSearchRequest(token, userId1, id))
+        call.enqueue(object : Callback<ChatFromSearchResponse> {
+            override fun onResponse(
+                call: Call<ChatFromSearchResponse>,
+                response: Response<ChatFromSearchResponse>
+            ) {
+                Timber.i("onResponse() called")
+                callback.onGetPrivateChatSuccessResponse(response.body()!!)
+            }
+
+            override fun onFailure(call: Call<ChatFromSearchResponse>, t: Throwable) {
+                Timber.i("onFailure() called")
+                callback.onGetPrivateChatFailureResponse(t)
+            }
+        })
+    }
 }

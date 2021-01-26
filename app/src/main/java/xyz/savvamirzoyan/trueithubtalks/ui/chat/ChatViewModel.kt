@@ -20,6 +20,7 @@ class ChatViewModel(
     val lastMessage = MutableLiveData<ChatMessage>()
     val messageHistory = MutableLiveData<ArrayList<ChatMessage>>()
     val repository: IRepositoryController.IChat = RepositoryController.Chat(this, activity)
+    private val userId = repository.getId()
 
     init {
         Timber.i("initialized")
@@ -29,13 +30,14 @@ class ChatViewModel(
     override fun onMessageHistory(data: ArrayList<TextMessageIncome>) {
         Timber.i("onMessageHistory() called")
         messageHistory.postValue(
-            ArrayList(data.map { ChatMessage(it.message, it.senderId != chatId) })
+            ArrayList(data.map { ChatMessage(it.message, it.senderId == userId) })
         )
     }
 
     override fun onNewMessage(data: TextMessageIncome) {
         Timber.i("onNewMessage() called")
-        lastMessage.postValue(ChatMessage(data.message, data.senderId != chatId))
+        lastMessage.postValue(ChatMessage(data.message, data.senderId == userId))
+        Timber.i("onMessageHistory() messageHistory: ${messageHistory.value}")
     }
 
     fun sendMessage(message: String) {
@@ -43,22 +45,8 @@ class ChatViewModel(
         repository.sendMessage(message)
     }
 
-    //    private val token = repository.getToken()
-//    private val webSocketController =
-//        WebSocketController.SingleChatController("token", title, lastMessage, messageHistory)
-//
-//    init {
-//        Timber.i("initialized")
-//        webSocketController.connectToChat()
-//    }
-//
-//    fun disconnect() {
-//        Timber.i("disconnect() called")
-//        webSocketController.disconnect()
-//    }
-//
-//    fun sendText(text: String) {
-//        Timber.i("sendText() called")
-//        webSocketController.sendText(text)
-//    }
+    fun disconnect() {
+        Timber.i("disconnect() called")
+        repository.disconnect()
+    }
 }

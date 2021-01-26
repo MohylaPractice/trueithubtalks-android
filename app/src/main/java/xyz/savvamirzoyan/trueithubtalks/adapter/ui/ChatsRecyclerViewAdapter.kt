@@ -33,7 +33,7 @@ class ChatsRecyclerViewAdapter(
                 )
         )
 
-        viewHolder.itemView.setOnClickListener { clickListener.onItemClick(viewHolder.layoutPosition) }
+        viewHolder.itemView.setOnClickListener { clickListener.onChatClick(viewHolder.layoutPosition) }
 
         return viewHolder
 
