@@ -24,10 +24,20 @@ class SearchFragment : Fragment(), RecyclerViewItemClickListener {
 
     private val userFoundRecyclerViewAdapter = ChatsFoundRecyclerViewAdapter(this, arrayListOf())
 
+    private val editTextWatcher = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            viewModel.searchUser(s.toString())
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Timber.i("onCreateView() called")
 
         // Binding
         binding = FragmentSearchBinding.inflate(inflater, container, false)
@@ -48,15 +58,29 @@ class SearchFragment : Fragment(), RecyclerViewItemClickListener {
         return binding.root
     }
 
-    private fun setOnChangedTextSearchView() {
-        binding.editTextSearch.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                viewModel.searchUser(s.toString())
-            }
+    override fun onStart() {
+        super.onStart()
+        Timber.i("onStart() called")
+    }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
+    override fun onResume() {
+        super.onResume()
+        Timber.i("onResume() called")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Timber.i("onPause() called")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Timber.i("onStop() called")
+        binding.editTextSearch.removeTextChangedListener(editTextWatcher)
+    }
+
+    private fun setOnChangedTextSearchView() {
+        binding.editTextSearch.addTextChangedListener(editTextWatcher)
     }
 
     private fun setOnFoundUserListener() {
@@ -67,18 +91,21 @@ class SearchFragment : Fragment(), RecyclerViewItemClickListener {
     }
 
     private fun setOnChatToOpenListener() {
-        viewModel.chatToOpen.observe(viewLifecycleOwner) {
-            Timber.i("chatIdToOpen: ${viewModel.chatToOpen.value}")
-            val action = SearchFragmentDirections.actionSearchFragmentToChatFragment(
-                viewModel.chatToOpen.value!!.id,
-                viewModel.chatToOpen.value!!.title,
-                viewModel.chatToOpen.value!!.pictureUrl
-            )
-            NavHostFragment.findNavController(this).navigate(action)
+        viewModel.chatToOpen.observe(viewLifecycleOwner) { event ->
+            Timber.i("chatIdToOpen: ${viewModel.chatToOpen.value?.isHandled}")
+            event.getContentIfNotHandled()?.let {
+                val action = SearchFragmentDirections.actionSearchFragmentToChatFragment(
+                    it.id,
+                    it.title,
+                    it.pictureUrl
+                )
+                NavHostFragment.findNavController(this).navigate(action)
+            }
         }
     }
 
     override fun onChatClick(position: Int) {
+        Timber.i("onChatClick(position: $position) called")
         val chat = userFoundRecyclerViewAdapter.getChatByPosition(position)
         viewModel.openChat(chat.id)
     }

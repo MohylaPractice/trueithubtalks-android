@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import timber.log.Timber
+import xyz.savvamirzoyan.trueithubtalks.event.Event
 import xyz.savvamirzoyan.trueithubtalks.interfaces.IViewModelCallback
 import xyz.savvamirzoyan.trueithubtalks.repository.API.response.ChatFromSearchResponse
 import xyz.savvamirzoyan.trueithubtalks.repository.API.response.ChatsSearchResponse
@@ -13,7 +14,7 @@ import xyz.savvamirzoyan.trueithubtalks.repository.model.ChatSearch
 class SearchViewModel(activity: Activity) : ViewModel(), IViewModelCallback.ISearch {
 
     val foundUserList = MutableLiveData<List<ChatSearch>>()
-    val chatToOpen = MutableLiveData<ChatFromSearchResponse>()
+    val chatToOpen = MutableLiveData<Event<ChatFromSearchResponse>>()
     val repository = RepositoryController.Search(this, activity)
 
     init {
@@ -40,7 +41,7 @@ class SearchViewModel(activity: Activity) : ViewModel(), IViewModelCallback.ISea
 
     override fun onGetPrivateChatSuccessResponse(response: ChatFromSearchResponse) {
         Timber.i("onGetPrivateChatSuccessResponse() called")
-        chatToOpen.postValue(response)
+        chatToOpen.postValue(Event(response))
     }
 
     override fun onGetPrivateChatFailureResponse(t: Throwable) {
