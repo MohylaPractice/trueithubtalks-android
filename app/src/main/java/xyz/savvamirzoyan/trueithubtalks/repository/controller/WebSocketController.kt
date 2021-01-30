@@ -88,6 +88,8 @@ class WebSocketController {
             override fun onMessage(webSocket: WebSocket, text: String) {
                 super.onMessage(webSocket, text)
 
+                Timber.i("onMessage(text: $text) called")
+
                 when (JSONObject(text).get("type")) {
                     "chat-feed-download" -> {
                         val data = Json.decodeFromString<Wrapper<ArrayList<Chat>>>(text).data

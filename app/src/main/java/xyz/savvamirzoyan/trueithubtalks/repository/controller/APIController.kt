@@ -26,7 +26,8 @@ object APIController {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 Timber.i("sendCredentials() -> onResponse() called")
                 Timber.i("Status code: ${response.code()} | token: ${response.body()?.token}")
-                callback.onCredentialsSuccessResponse(response.body()!!)
+                if (response.code() == 200) callback.onCredentialsSuccessResponse(response.body()!!)
+                else callback.onCredentialsFailureResponse(null)
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {

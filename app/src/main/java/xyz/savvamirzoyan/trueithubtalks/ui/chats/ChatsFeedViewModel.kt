@@ -16,6 +16,9 @@ class ChatsFeedViewModel(activity: Activity) : ViewModel(), IViewModelCallback.I
 
     init {
         Timber.i("initialized")
+    }
+
+    fun downloadChatsFeed() {
         repository.establishConnection()
     }
 
@@ -25,17 +28,15 @@ class ChatsFeedViewModel(activity: Activity) : ViewModel(), IViewModelCallback.I
     }
 
     override fun onChatsFeedUpdate(data: Chat) {
-        Timber.i("onChatsFeedUpdate() called")
-        val chatIndexToChange =
-            chatsLiveData.value?.indexOf { chatsLiveData.value!!.find { it.id == data.id } } ?: 0
+        Timber.i("onChatsFeedUpdate(data: $data) called")
+        Timber.i("chatsLiveData: ${chatsLiveData.value}")
+        val chatIndexToChange = chatsLiveData.value?.indexOfFirst { it.id == data.id } ?: 0
         val chats = chatsLiveData.value
 
-        if (chats?.size == 0) {
-            chatsLiveData.postValue(arrayListOf(data))
-        } else {
-            chats?.set(chatIndexToChange, data)
-        }
+        if (chats?.size != 0) chats?.set(chatIndexToChange, data)
+        else chats.add(data)
 
+        chatsLiveData.postValue(chats)
     }
 
     override fun onChatsFeedFailure(t: Throwable) {

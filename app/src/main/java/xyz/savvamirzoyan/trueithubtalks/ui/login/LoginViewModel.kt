@@ -43,7 +43,7 @@ class LoginViewModel(activity: Activity) : ViewModel(),
         repository.setPictureUrl(response.pictureUrl)
     }
 
-    override fun onCredentialsFailureResponse(t: Throwable) {
+    override fun onCredentialsFailureResponse(t: Throwable?) {
         tokenLiveData.postValue("")
     }
 

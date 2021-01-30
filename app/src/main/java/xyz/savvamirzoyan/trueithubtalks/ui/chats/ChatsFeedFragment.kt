@@ -47,6 +47,11 @@ class ChatsFeedFragment : Fragment(), RecyclerViewItemClickListener {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.downloadChatsFeed()
+    }
+
     private fun setOnChangedChatsListener() {
         viewModel.chatsLiveData.observe(viewLifecycleOwner) {
             chatsRecyclerViewAdapter.updateChats(it)

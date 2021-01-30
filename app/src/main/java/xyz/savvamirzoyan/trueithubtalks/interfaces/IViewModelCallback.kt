@@ -10,7 +10,7 @@ import xyz.savvamirzoyan.trueithubtalks.repository.websockets.request.TextMessag
 interface IViewModelCallback {
     interface ILogin {
         fun onCredentialsSuccessResponse(response: LoginResponse)
-        fun onCredentialsFailureResponse(t: Throwable)
+        fun onCredentialsFailureResponse(t: Throwable?)
     }
 
     interface ISignUp {
