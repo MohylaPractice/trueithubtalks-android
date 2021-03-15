@@ -1,9 +1,6 @@
 package xyz.savvamirzoyan.trueithubtalks.interfaces
 
-import xyz.savvamirzoyan.trueithubtalks.repository.API.response.AccountInfoResponse
-import xyz.savvamirzoyan.trueithubtalks.repository.API.response.ChatFromSearchResponse
-import xyz.savvamirzoyan.trueithubtalks.repository.API.response.ChatsSearchResponse
-import xyz.savvamirzoyan.trueithubtalks.repository.API.response.LoginResponse
+import xyz.savvamirzoyan.trueithubtalks.repository.API.response.*
 import xyz.savvamirzoyan.trueithubtalks.repository.websockets.jsonserializable.Chat
 import xyz.savvamirzoyan.trueithubtalks.repository.websockets.request.TextMessageIncome
 
@@ -46,5 +43,10 @@ interface IViewModelCallback {
         fun onChatsFeedUpdate(data: Chat)
 
         fun onChatsFeedFailure(t: Throwable)
+    }
+
+    interface IUserAccount {
+        fun onGetChatSuccessResponse(response: ChatInfoResponse)
+        fun onGetChatFailureResponse(t: Throwable)
     }
 }

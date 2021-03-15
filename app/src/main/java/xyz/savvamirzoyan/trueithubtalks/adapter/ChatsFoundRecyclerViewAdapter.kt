@@ -41,6 +41,7 @@ class ChatsFoundRecyclerViewAdapter(
 
         Picasso.with(holder.picture.context)
             .load(chat.pictureUrl)
+            .placeholder(R.drawable.ic_account_circle)
             .into(holder.picture)
     }
 

@@ -6,22 +6,20 @@ import retrofit2.Response
 import timber.log.Timber
 import xyz.savvamirzoyan.trueithubtalks.interfaces.IViewModelCallback
 import xyz.savvamirzoyan.trueithubtalks.repository.API.RetrofitClient
-import xyz.savvamirzoyan.trueithubtalks.repository.API.request.AccountInfoRequest
-import xyz.savvamirzoyan.trueithubtalks.repository.API.request.ChatFromSearchRequest
-import xyz.savvamirzoyan.trueithubtalks.repository.API.request.LoginCredentialsRequest
-import xyz.savvamirzoyan.trueithubtalks.repository.API.request.UserSearchRequest
-import xyz.savvamirzoyan.trueithubtalks.repository.API.response.AccountInfoResponse
-import xyz.savvamirzoyan.trueithubtalks.repository.API.response.ChatFromSearchResponse
-import xyz.savvamirzoyan.trueithubtalks.repository.API.response.ChatsSearchResponse
-import xyz.savvamirzoyan.trueithubtalks.repository.API.response.LoginResponse
+import xyz.savvamirzoyan.trueithubtalks.repository.API.request.*
+import xyz.savvamirzoyan.trueithubtalks.repository.API.response.*
 
 object APIController {
 
-    fun sendCredentials(callback: IViewModelCallback.ILogin, name: String, password: String) {
-        Timber.i("sendCredentials($name, $password) called")
+    fun sendCredentials(
+        callback: IViewModelCallback.ILogin,
+        username: String,
+        password: String
+    ) {
+        Timber.i("sendCredentials($username, $password) called")
 
         val call =
-            RetrofitClient.apiInterface.sendCredentials(LoginCredentialsRequest(name, password))
+            RetrofitClient.apiInterface.sendCredentials(LoginCredentialsRequest(username, password))
         call.enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 Timber.i("sendCredentials() -> onResponse() called")
@@ -124,7 +122,7 @@ object APIController {
         userId1: Int,
         id: Int
     ) {
-        Timber.i("getPrivateChat(token: $token, userId1: $userId1, userId2: $id) called")
+        Timber.i("getChat(token: $token, userId1: $userId1, userId2: $id) called")
 
         val call =
             RetrofitClient.apiInterface.getPrivateChat(ChatFromSearchRequest(token, userId1, id))
@@ -140,6 +138,32 @@ object APIController {
             override fun onFailure(call: Call<ChatFromSearchResponse>, t: Throwable) {
                 Timber.i("onFailure() called")
                 callback.onGetPrivateChatFailureResponse(t)
+            }
+        })
+    }
+
+    fun getPrivateChatInfo(
+        callback: IViewModelCallback.IUserAccount,
+        token: String,
+        userId: Int,
+        chatId: Int
+    ) {
+        Timber.i("getChat(token: $token, id: $chatId) called")
+
+        val call =
+            RetrofitClient.apiInterface.getPrivateChatInfo(ChatInfoRequest(token, userId, chatId))
+        call.enqueue(object : Callback<ChatInfoResponse> {
+            override fun onResponse(
+                call: Call<ChatInfoResponse>,
+                response: Response<ChatInfoResponse>
+            ) {
+                Timber.i("onResponse() called")
+                callback.onGetChatSuccessResponse(response.body()!!)
+            }
+
+            override fun onFailure(call: Call<ChatInfoResponse>, t: Throwable) {
+                Timber.i("onFailure() called")
+                callback.onGetChatFailureResponse(t)
             }
         })
     }

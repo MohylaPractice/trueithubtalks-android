@@ -11,7 +11,7 @@ import xyz.savvamirzoyan.trueithubtalks.repository.model.ChatMessage
 import xyz.savvamirzoyan.trueithubtalks.repository.websockets.request.TextMessageIncome
 
 class ChatViewModel(
-    private val chatId: Int,
+    val chatId: Int,
     title: String,
     pictureUrl: String,
     activity: Activity

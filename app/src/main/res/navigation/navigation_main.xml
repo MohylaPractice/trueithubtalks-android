@@ -39,7 +39,7 @@
     <fragment
         android:id="@+id/chatFragment"
         android:name="xyz.savvamirzoyan.trueithubtalks.ui.chat.ChatFragment"
-        android:label="fragment_chat"
+        android:label="@string/private_chat"
         tools:layout="@layout/fragment_chat">
         <argument
             android:name="chatId"
@@ -50,5 +50,17 @@
         <argument
             android:name="pictureUrl"
             app:argType="string" />
+        <action
+            android:id="@+id/action_chatFragment_to_userAccountInfoFragment"
+            app:destination="@id/userAccountInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userAccountInfoFragment"
+        android:name="xyz.savvamirzoyan.trueithubtalks.ui.useraccount.UserAccountFragment"
+        android:label=""
+        tools:layout="@layout/fragment_user_account">
+        <argument
+            android:name="chatId"
+            app:argType="integer" />
     </fragment>
 </navigation>

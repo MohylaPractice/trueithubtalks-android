@@ -4,14 +4,8 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
-import xyz.savvamirzoyan.trueithubtalks.repository.API.request.AccountInfoRequest
-import xyz.savvamirzoyan.trueithubtalks.repository.API.request.ChatFromSearchRequest
-import xyz.savvamirzoyan.trueithubtalks.repository.API.request.LoginCredentialsRequest
-import xyz.savvamirzoyan.trueithubtalks.repository.API.request.UserSearchRequest
-import xyz.savvamirzoyan.trueithubtalks.repository.API.response.AccountInfoResponse
-import xyz.savvamirzoyan.trueithubtalks.repository.API.response.ChatFromSearchResponse
-import xyz.savvamirzoyan.trueithubtalks.repository.API.response.ChatsSearchResponse
-import xyz.savvamirzoyan.trueithubtalks.repository.API.response.LoginResponse
+import xyz.savvamirzoyan.trueithubtalks.repository.API.request.*
+import xyz.savvamirzoyan.trueithubtalks.repository.API.response.*
 
 interface IAPIEndpoints {
 
@@ -24,7 +18,7 @@ interface IAPIEndpoints {
     fun sendSignUpCredentials(@Body body: LoginCredentialsRequest): Call<LoginResponse>
 
     @Headers("Content-Type: application/json")
-    @POST("user-info")
+    @POST("get-account-info")
     fun getAccountInfo(@Body body: AccountInfoRequest): Call<AccountInfoResponse>
 
     @Headers("Content-Type: application/json")
@@ -34,4 +28,8 @@ interface IAPIEndpoints {
     @Headers("Content-Type: application/json")
     @POST("get-chat-from-search")
     fun getPrivateChat(@Body body: ChatFromSearchRequest): Call<ChatFromSearchResponse>
+
+    @Headers("Content-Type: application/json")
+    @POST("get-private-chat-info")
+    fun getPrivateChatInfo(@Body body: ChatInfoRequest): Call<ChatInfoResponse>
 }

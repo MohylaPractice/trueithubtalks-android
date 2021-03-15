@@ -46,4 +46,6 @@ interface IRepositoryController {
         fun establishConnection()
         fun disconnect()
     }
+
+    interface IUserAccount
 }

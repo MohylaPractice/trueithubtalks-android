@@ -98,13 +98,13 @@ class RepositoryController : IRepositoryController {
             APIController.searchUser(viewModelCallback, preferences.getTokenValue(), username)
         }
 
-        override fun getChat(id: Int) {
-            Timber.i("getChat(userId: $id) called")
+        override fun getChat(userId: Int) {
+            Timber.i("getChat(userId: $userId) called")
             APIController.getChat(
                 viewModelCallback,
                 preferences.getTokenValue(),
                 preferences.getIdValue(),
-                id
+                userId
             )
         }
     }
@@ -158,6 +158,22 @@ class RepositoryController : IRepositoryController {
         override fun disconnect() {
             Timber.i("disconnect() called")
             websocket.disconnect()
+        }
+    }
+
+    class UserAccountInfo(
+        private val viewModelCallback: IViewModelCallback.IUserAccount,
+        activity: Activity
+    ) : IRepositoryController.IUserAccount {
+        private val preferences = SharedPreferencesController(activity)
+
+        fun getPrivateChatInfo(chatId: Int) {
+            APIController.getPrivateChatInfo(
+                viewModelCallback,
+                preferences.getTokenValue(),
+                preferences.getIdValue(),
+                chatId
+            )
         }
     }
 }

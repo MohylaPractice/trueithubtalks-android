@@ -2,13 +2,14 @@ package xyz.savvamirzoyan.trueithubtalks.ui.chat
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import timber.log.Timber
+import xyz.savvamirzoyan.trueithubtalks.R
 import xyz.savvamirzoyan.trueithubtalks.adapter.RecyclerViewChatAdapter
 import xyz.savvamirzoyan.trueithubtalks.databinding.FragmentChatBinding
 import xyz.savvamirzoyan.trueithubtalks.factory.ChatViewModelFactory
@@ -25,6 +26,8 @@ class ChatFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        setHasOptionsMenu(true)
 
         // Binding
         binding = FragmentChatBinding.inflate(inflater, container, false)
@@ -61,6 +64,32 @@ class ChatFragment : Fragment() {
         val imm: InputMethodManager =
             requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.private_chat_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Timber.i("onOptionsItemSelected() called")
+        return when (item.itemId) {
+            R.id.userAccountInfoFragment -> {
+                NavHostFragment.findNavController(this).navigate(
+                    ChatFragmentDirections.actionChatFragmentToUserAccountInfoFragment(
+                        viewModel.chatId
+                    )
+                )
+                true
+            }
+
+            R.id.clear_history -> true
+
+            else -> {
+                activity?.onBackPressed()
+                true
+            }
+        }
     }
 
     private fun setOnChangedMessageHistoryListener() {
